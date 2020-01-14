@@ -10,25 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-
 #include "include/nm.h"
 #include "include/nm_symlist.h"
 
 #define EXIT_FALSE	0
 #define EXIT_TRUE	1
-#define CMP(x, y)	(((ft_strcmp(x, y) < 0) ? EXIT_FALSE : EXIT_TRUE))
-
-static inline struct s_symlist	*ft_get_entry(	__pure struct s_list *ptr)
-{
-	return ((struct s_symlist *)((uintptr_t)ptr - __offsetof(struct s_symlist, list)));
-}
-
-static char			*ft_get_name(	__pure struct s_file *f,
-						__pure struct s_list *p)
-{
-	return ((char *)(uintptr_t)f->strtab + ft_get_entry(p)->entry.entry64->n_un.n_strx);
-}
 
 static int			ft_strcmp(char const *s1, char const *s2)
 {
@@ -40,29 +26,53 @@ static int			ft_strcmp(char const *s1, char const *s2)
 	return ((*s1) - (*s2));
 }
 
-static void			ft_swap_nodes(struct s_list *prev, struct s_list *next)
+static inline int		ft_alpha_cmp(	struct s_file *file,
+						struct s_list *pos)
 {
-	prev->prev->next = next;
-	next->next->prev = prev;
-	prev->next = next->next;
-	next->prev = prev->prev;
-	next->next = prev;
-	prev->prev = next;
+	char const		*s1 = ft_get_name(file, pos);
+	char const		*s2 = ft_get_name(file, pos->next);
+
+	return (ft_strcmp(s1, s2) > 0 ? EXIT_FALSE : EXIT_TRUE);
 }
 
+static void			ft_swap_nodes(	struct s_list *head,
+						struct s_list *prev,
+						struct s_list *next)
+{
+	struct s_list		*node;
+
+	node = prev->next;
+	prev->next = next->next;
+	next->next = node;
+	if (prev->next != head)
+		prev->next->prev = prev;
+	if (next->next != head)
+		next->next->prev = next;
+	node = prev->prev;
+	prev->prev = next->prev;
+	next->prev = node;
+	if (prev->prev != head)
+		prev->prev->next = prev;
+	next->prev->next = next;
+}
+
+/*
+**	Does a bubble sort on the given list. Sorting time is O(n^2) on average
+**	which is slow but sufficient in most cases.
+*/
 void				ft_bubble_sort_list(	struct s_file *file,
 							struct s_symlist *lst)
 {
 	struct s_list		*position;
-	struct s_list		*head = &(lst->list);
 
 	if (file->flags & OPTION_P)
 		return ;
-	position = head;
-	while ((position = position->next) != head)
+	position = &(lst->list);
+	while ((position = position->next) != &(lst->list))
 	{
-		if (CMP(ft_get_name(file, position), ft_get_name(file, position->next))) {
-			ft_swap_nodes(position, position->next);
+		if (position->next != &(lst->list) && ft_alpha_cmp(file, position)) {
+			ft_swap_nodes(&(lst->list), position, position->next);
+			position = position->next;
 		}
 	}
 }

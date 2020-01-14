@@ -22,6 +22,8 @@
 /*		en endian CIGAM.					*/
 /*		Trier la liste (avec toutes les options)		*/
 /*		Affichage.						*/
+/*		Vraiment utile de gérer le 32bits si il est déprécié	*/
+/*		sous macOS ?						*/
 int				main(int argc, char const **argv)
 {
 	struct s_file		file;
@@ -32,7 +34,7 @@ int				main(int argc, char const **argv)
 	HANDLE_GNU_ERROR(ft_load_file_content(&file, file.filename));
 	HANDLE_GNU_ERROR(ft_parse_mach_o_file(&list, &file));
 
-//	ft_bubble_sort_list(&file, &list);
+	ft_bubble_sort_list(&file, &list);
 	ft_display_symbols(&file, &list);
 
 	ft_free_list(&(list.list));
