@@ -29,14 +29,22 @@
 # define OPTION_CAPU		0x0000004
 # define OPTION_J		0x0000008
 # define OPTION_P		0x0000010
+# define OPTION_N		0x0000020
+
+struct				s_symbol
+{
+	char			*name;
+	struct nlist_64		*entry;
+};
 
 struct				s_file
 {
+	struct s_symbol		*symarray;
 	char			*filename;
 	unsigned char		*content;
 	void			*strtab;
 	size_t			length;
-	size_t			cpu;
+	size_t			arrsize;
 	size_t			flags;
 };
 

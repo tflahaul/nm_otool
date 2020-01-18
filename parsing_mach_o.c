@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   parsing_mach_o.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -18,7 +18,6 @@
 
 #include "include/libsimd.h"
 #include "include/nm.h"
-#include "include/nm_symlist.h"
 #include "include/nm_errors.h"
 
 #define HEADER_SZ(x)	((x) ? sizeof(struct mach_header_64) : sizeof(struct mach_header))
@@ -42,19 +41,21 @@ int			ft_load_file_content(	struct s_file *file,
 	return (EXIT_SUCCESS);
 }
 
-static void		ft_ld_symtab64_entries(	struct s_symlist *head,
+static void		ft_ld_symtab64_entries(	struct s_symbol *tab,
 						__pure struct symtab_command *sycom,
 						__pure struct s_file *file)
 {
 	void const	*symtab = (void *)((uintptr_t)file->content + sycom->symoff);
 
+	if (!(tab = (struct s_symbol *)malloc(sizeof(struct s_symbol *) * sycom->nsyms)))
+		HANDLE_GNU_ERROR(-EXIT_FAILURE);
 	for (unsigned int idx = 0; idx < sycom->nsyms; ++idx) {
 		if (!(((struct nlist_64 *)symtab + idx)->n_type & N_STAB))
-			HANDLE_GNU_ERROR(ft_symlist_push(head, (struct nlist_64 *)symtab + idx));
+			HANDLE_GNU_ERROR(ft_symlist_push(tab, (struct nlist_64 *)symtab + idx));
 	}
 }
 
-int			ft_parse_mach_o_file(	struct s_symlist *lst,
+int			ft_parse_mach_o_file(	struct s_symbol *tab,
 						struct s_file *file	)
 {
 	struct mach_header const	*header = (void *)file->content;
@@ -71,9 +72,14 @@ int			ft_parse_mach_o_file(	struct s_symlist *lst,
 			HANDLE_GNU_ERROR(munmap((void *)file->content, file->length));
 			return (-EXIT_FAILURE);
 		}
+		if ((ldptr->cmd == LC_ENCRYPTION_INFO || ldptr->cmd == LC_ENCRYPTION_INFO_64) \
+			&& ((struct encryption_info_command *)ldptr)->cryptid) {
+			HANDLE_GNU_ERROR(munmap((void *)file->content, file->length));
+			return (-EXIT_FAILURE);
+		}
 		ldptr = (struct load_command *)((uintptr_t)ldptr + ldptr->cmdsize);
 	}
 	file->strtab = (void *)(file->content + ((struct symtab_command *)ldptr)->stroff);
-	ft_ld_symtab64_entries(lst, (struct symtab_command *)ldptr, file);
+	ft_ld_symtab64_entries(tab, (struct symtab_command *)ldptr, file);
 	return (EXIT_SUCCESS);
 }

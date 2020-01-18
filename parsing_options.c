@@ -19,11 +19,12 @@
 #include "include/nm_parsing_options.h"
 
 static t_options	g_options[] = {
-	{"reverse", OPTION_R,    no_argument, 'r'},
-	{"undef",   OPTION_U,    no_argument, 'u'},
-	{"noundef", OPTION_CAPU, no_argument, 'U'},
-	{"names",   OPTION_J,    no_argument, 'j'},
-	{"nosort",  OPTION_P,    no_argument, 'p'},
+	{"reverse-sort",    OPTION_R,    no_argument, 'r'},
+	{"undefined-only",  OPTION_U,    no_argument, 'u'},
+	{"defined-only",    OPTION_CAPU, no_argument, 'U'},
+	{"names-only",      OPTION_J,    no_argument, 'j'},
+	{"no-sort",         OPTION_P,    no_argument, 'p'},
+	{"numeric-sort",    OPTION_N,    no_argument, 'n'},
 	{0, 0, 0, 0}
 };
 

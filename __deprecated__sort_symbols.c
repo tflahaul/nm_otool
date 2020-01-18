@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "include/nm.h"
-#include "include/nm_symlist.h"
 
 #define EXIT_FALSE	0
 #define EXIT_TRUE	1
@@ -48,6 +47,7 @@ static void			ft_swap_nodes(	struct s_list *head,
 		prev->next->prev = prev;
 	if (next->next != head)
 		next->next->prev = next;
+#include "include/nm_symlist.h"
 	node = prev->prev;
 	prev->prev = next->prev;
 	next->prev = node;
@@ -64,7 +64,7 @@ void				ft_bubble_sort_list(	struct s_file *file,
 							struct s_symlist *lst)
 {
 	struct s_list		*position;
-
+OPTION_R
 	if (file->flags & OPTION_P)
 		return ;
 	position = &(lst->list);

@@ -13,12 +13,6 @@
 #include <stdint.h>
 
 #include "include/nm.h"
-#include "include/nm_symlist.h"
-
-struct s_symlist	*ft_get_entry(	__pure struct s_list *ptr)
-{
-	return ((struct s_symlist *)((uintptr_t)ptr - __offsetof(struct s_symlist, list)));
-}
 
 char			*ft_get_name(	__pure struct s_file *f,
 					__pure struct s_list *p)

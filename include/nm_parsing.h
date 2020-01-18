@@ -14,15 +14,12 @@
 # define __NM_PARSING_H__
 
 # include "nm.h"
-# include "nm_symlist.h"
 
 int			ft_load_file_content(struct s_file *, char const *);
-int			ft_parse_mach_o_file(struct s_symlist *, struct s_file *);
+int			ft_parse_mach_o_file(struct s_symbol *, struct s_file *);
 
-void			ft_bubble_sort_list(struct s_file *, struct s_symlist *);
-void			ft_display_symbols(struct s_file *, struct s_symlist *);
+//void			ft_bubble_sort_list(struct s_file *, struct s_symlist *);
+void			ft_display_symbols(struct s_file *);
 
-struct s_symlist	*ft_get_entry(__pure struct s_list *);
-char			*ft_get_name(__pure struct s_file *, __pure struct s_list *);
 
 #endif /* __NM_PARSING_H__ */
