@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:31 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/20 13:33:48 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/20 13:38:50 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 
 /* TODO:	Gestion des fichiers 32bits, fat, archives et encodage	*/
 /*		en endian CIGAM.					*/
-/*		Trier la liste (avec toutes les options)		*/
 /*		Affichage.						*/
 /*		Vraiment utile de gérer le 32bits si il est déprécié	*/
 /*		sous macOS ?						*/
