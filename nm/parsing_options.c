@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 09:19:28 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/14 14:35:36 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/20 13:34:00 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "include/nm.h"
-#include "include/nm_errors.h"
-#include "include/nm_parsing_options.h"
+#include "../include/nm.h"
+#include "../include/nm_errors.h"
+#include "../include/nm_parsing_options.h"
 
-static t_options	g_options[] = {
+static struct s_options		g_options[] = {
 	{"reverse-sort",    OPTION_R,    no_argument, 'r'},
 	{"undefined-only",  OPTION_U,    no_argument, 'u'},
 	{"defined-only",    OPTION_CAPU, no_argument, 'U'},
@@ -30,54 +30,58 @@ static t_options	g_options[] = {
 
 static inline char		*ft_option_trim(char const *argument)
 {
-	char			*ptr;
-	register unsigned int	index;
+	register unsigned int	index = 0;
+	char			*ptr = (char *)argument;
 
-	index = 0;
-	ptr = (char *)argument;
 	while (*ptr == '-' && ++index <= 2)
 		++ptr;
 	return (ptr);
 }
 
-static inline int		ft_long_option_lookup(char const *argument)
+static int			ft_long_option_lookup(	struct s_file *file,
+							char const *argument)
 {
-	register unsigned int	index;
+	register unsigned int	index = 0;
 
-	index = 0;
-	while (g_options[index++].longname != 0)
-		if (strcmp(argument, g_options[index - 1].longname) == 0)
-			return (index - 1);
-	return (index);
+	while (g_options[index++].longname != 0) {
+		if (strcmp(argument, g_options[index - 1].longname) == 0) {
+			file->flags |= g_options[index - 1].flag;
+			return (EXIT_SUCCESS);
+		}
+	}
+	return (EXIT_FAILURE);
 }
 
-static inline int		ft_short_option_lookup(char const *argument)
+static int			ft_short_option_lookup(	struct s_file *file,
+							char const *argument)
 {
-	register unsigned int	index;
+	int			ret = EXIT_FAILURE;
+	register unsigned int	idx = 0;
+	register unsigned int	index = 0;
 
-	index = 0;
-	if (argument[1])
-		return (4);
-	while (g_options[index++].longname != 0)
-		if (argument[0] == g_options[index - 1].shortname)
-			return (index - 1);
-	return (index);
+	while (argument[idx] != 0) {
+		while (g_options[index++].longname != 0) {
+			if (argument[idx] == g_options[index - 1].shortname) {
+				file->flags |= g_options[index - 1].flag;
+				ret = EXIT_SUCCESS;
+			}
+		}
+		++idx;
+	}
+	return (ret);
 }
 
 int				ft_parse_options(struct s_file *file, int argc,
-							char const **argv)
+						char const **argv)
 {
-	int		index;
-	int		ret = EXIT_SUCCESS;
+	int		index = 1;
 
-	index = 1;
 	while (index < argc && argv[index][0] == '-') {
-		if (argv[index][1] == '-')
-			ret = ft_long_option_lookup(ft_option_trim(argv[index]));
-		else
-			ret = ft_short_option_lookup(ft_option_trim(argv[index]));
-		HANDLE_GNU_ERROR(ret);
-		file->flags &= g_options[ret].flag;
+		if (argv[index][1] == '-') {
+			HANDLE_GNU_ERROR(ft_long_option_lookup(file, ft_option_trim(argv[index])));
+		}
+		else if (ft_short_option_lookup(file, ft_option_trim(argv[index])) != EXIT_SUCCESS)
+			HANDLE_GNU_ERROR(-EXIT_FAILURE);
 		++index;
 	}
 	file->filename = (char *)argv[index];

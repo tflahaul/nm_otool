@@ -6,13 +6,14 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:40:04 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/14 14:56:38 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/20 13:33:41 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
-#include "include/nm.h"
+#include "../include/nm.h"
+#include "../include/nm_parsing_options.h"
 
 void			ft_display_symbols(struct s_file *file)
 {

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/14 14:41:54 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/20 12:44:51 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,6 @@
 
 # define PROGRAM_NAME(p)	(p ? p : "a.out")
 
-# define OPTION_R		0x0000001
-# define OPTION_U		0x0000002
-# define OPTION_CAPU		0x0000004
-# define OPTION_J		0x0000008
-# define OPTION_P		0x0000010
-# define OPTION_N		0x0000020
-
 struct				s_symbol
 {
 	char			*name;
@@ -47,5 +40,7 @@ struct				s_file
 	size_t			arrsize;
 	size_t			flags;
 };
+
+void				ft_bubble_sort_symbols(struct s_file *);
 
 #endif /* __NM_H__ */

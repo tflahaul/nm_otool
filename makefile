@@ -6,7 +6,7 @@
 #    By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 22:08:10 by abrunet           #+#    #+#              #
-#    Updated: 2020/01/14 11:26:34 by thflahau         ###   ########.fr        #
+#    Updated: 2020/01/20 13:33:25 by thflahau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME		=	ft_nm
 
 #######   DIRECTORIES   #######
 HDR		=	include
-SRCDIR		=	.
+SRCDIR		=	nm
 OBJDIR		=	obj
 
 DIRS := $(patsubst $(SRCDIR)%, $(OBJDIR)%, $(shell find $(SRCDIR) -type d))

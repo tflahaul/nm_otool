@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 08:40:24 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/14 12:48:48 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/20 13:05:49 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,24 @@
 
 # include "nm.h"
 
+# define OPTION_R		0x0000001
+# define OPTION_U		0x0000002
+# define OPTION_CAPU		0x0000004
+# define OPTION_J		0x0000008
+# define OPTION_P		0x0000010
+# define OPTION_N		0x0000020
+
 enum				e_needargs {
 	no_argument,
 	required_argument
 };
 
-typedef struct			s_options {
+struct				s_options {
 	char			*longname;
 	size_t			flag;
 	int			has_arg;
 	int			shortname;
-}				t_options;
+};
 
 int				ft_parse_options(struct s_file *, int, char const **);
 

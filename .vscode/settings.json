@@ -1,4 +1,9 @@
 {
 	"editor.rulers": [80, 100],
-	"editor.tabSize": 8
+	"editor.tabSize": 8,
+	"files.associations": {
+		"nm_parsing_options.h": "c",
+		"nm_errors.h": "c",
+		"nm_parsing_mach_o.h": "c"
+	}
 }
