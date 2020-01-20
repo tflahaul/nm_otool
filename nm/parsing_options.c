@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 09:19:28 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/20 13:34:00 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/20 16:18:07 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <string.h>
 
 #include "../include/nm.h"
-#include "../include/nm_errors.h"
+#include "../include/errors.h"
 #include "../include/nm_parsing_options.h"
 
 static struct s_options		g_options[] = {

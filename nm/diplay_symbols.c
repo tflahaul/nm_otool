@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:40:04 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/20 14:05:20 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/20 16:00:37 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void			ft_display_symbols(struct s_file *file)
 {
 	void		(*funptr)(struct s_symbol *);
 
+	if (file->symarray == NULL)
+		return ;
 	funptr = (file->flags & OPTION_J ? &ft_names_only : &ft_complete_print);
 	if (file->flags & OPTION_R) {
 		while (file->arrsize--)

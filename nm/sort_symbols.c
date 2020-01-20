@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 12:19:58 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/20 13:34:05 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/20 16:00:15 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void				ft_bubble_sort_symbols(struct s_file *file)
 {
 	struct s_symbol		*tab = file->symarray;
 
-	if (file->flags & OPTION_P)
+	if (tab == NULL || file->flags & OPTION_P)
 		return ;
 	if (file->flags & OPTION_N) {
 		for (unsigned int idx = 0; idx < file->arrsize - 1;) {
