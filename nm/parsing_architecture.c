@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_mach_o.c                                   :+:      :+:    :+:   */
+/*   parsing_architecture.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -39,7 +39,7 @@ int				ft_load_file_content(	struct s_file *file,
 	return (EXIT_SUCCESS);
 }
 
-int				ft_parse_mach_o_file(	struct s_file *file)
+int				ft_parse_architecture(	struct s_file *file)
 {
 	uint32_t const		mc = ((uint32_t *)file->content)[0];
 

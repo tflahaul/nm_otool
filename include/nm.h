@@ -41,8 +41,8 @@ struct				s_file
 	size_t			flags;
 };
 
-int				ft_parse_fat_file(struct s_file *);
-int				ft_parse_binary_file(struct s_file *);
+int				ft_parse_fat(struct s_file *);
+int				ft_parse_mach_o_file(struct s_file *);
 void				ft_bubble_sort_symbols(struct s_file *);
 
 #endif /* __NM_H__ */

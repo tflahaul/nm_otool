@@ -16,16 +16,19 @@
 #include "../include/nm.h"
 #include "../include/nm_parsing_options.h"
 
-static void			ft_swap_entries(struct s_symbol *e1, struct s_symbol *e2)
+#define EXIT_FALSE	0
+#define EXIT_TRUE	1
+
+static void		ft_swap_entries(struct s_symbol *e1, struct s_symbol *e2)
 {
-	struct s_symbol		temp;
+	struct s_symbol	temp;
 
 	memcpy(&temp, e1, sizeof(struct s_symbol));
 	memcpy(e1, e2, sizeof(struct s_symbol));
 	memcpy(e2, &temp, sizeof(struct s_symbol));
 }
 
-static int			ft_strcmp(char const *s1, char const *s2)
+static int		ft_strcmp(char const *s1, char const *s2)
 {
 	if (s1 == s2)
 		return (EXIT_SUCCESS);
@@ -37,35 +40,33 @@ static int			ft_strcmp(char const *s1, char const *s2)
 	return ((*s1) - (*s2));
 }
 
-static inline int		alpha_cmp(char const *s1, char const *s2)
+static int		alpha_cmp(struct s_symbol *e1, struct s_symbol *e2)
 {
-	return ((ft_strcmp(s1, s2) > 0) ? EXIT_FAILURE : EXIT_SUCCESS);
+	return ((ft_strcmp(e1->name, e2->name) > 0) ? EXIT_TRUE : EXIT_FALSE);
 }
 
-void				ft_bubble_sort_symbols(struct s_file *file)
+static int		numeric_cmp(struct s_symbol *e1, struct s_symbol *e2)
 {
-	struct s_symbol		*tab = file->symarray;
+	return (e1->entry->n_value > e2->entry->n_value);
+}
 
-	if (tab == NULL || file->flags & OPTION_P)
+/*
+**	Does a bubble sort on the symbol array. Sorting time is O(n^2) on
+**	average which is slow but sufficient in most cases.
+*/
+void			ft_bubble_sort_symbols(struct s_file *file)
+{
+	int		(*funptr)(struct s_symbol *, struct s_symbol *);
+
+	if (file->symarray == NULL || file->flags & OPTION_P)
 		return ;
-	if (file->flags & OPTION_N) {
-		for (unsigned int idx = 0; idx < file->arrsize - 1;) {
-			if (tab[idx].entry->n_value > tab[idx + 1].entry->n_value) {
-				ft_swap_entries(&(tab[idx]), &(tab[idx + 1]));
-				idx = 0;
-			}
-			else
-				++idx;
+	funptr = file->flags & OPTION_N ? &numeric_cmp : &alpha_cmp;
+	for (unsigned int idx = 0; idx < file->arrsize - 1;) {
+		if ((*funptr)(&(file->symarray[idx]), &(file->symarray[idx + 1]))) {
+			ft_swap_entries(&(file->symarray[idx]), &(file->symarray[idx + 1]));
+			idx = 0;
 		}
-	}
-	else {
-		for (unsigned int idx = 0; idx < file->arrsize - 1;) {
-			if (alpha_cmp(tab[idx].name, tab[idx + 1].name)) {
-				ft_swap_entries(&(tab[idx]), &(tab[idx + 1]));
-				idx = 0;
-			}
-			else
-				++idx;
-		}
+		else
+			++idx;
 	}
 }

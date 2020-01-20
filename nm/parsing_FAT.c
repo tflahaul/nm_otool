@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_fat.c                                      :+:      :+:    :+:   */
+/*   parsing_FAT.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,7 +16,7 @@
 
 #include "../include/nm.h"
 
-int			ft_parse_fat_file(struct s_file *file)
+int				ft_parse_fat(struct s_file *file)
 {
 	struct fat_header	header;
 
