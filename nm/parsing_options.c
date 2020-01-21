@@ -6,11 +6,10 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 09:19:28 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/20 16:18:07 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/21 12:20:31 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -57,9 +56,10 @@ static int			ft_short_option_lookup(	struct s_file *file,
 {
 	int			ret = EXIT_FAILURE;
 	register unsigned int	idx = 0;
-	register unsigned int	index = 0;
+	register unsigned int	index;
 
 	while (argument[idx] != 0) {
+		index = 0;
 		while (g_options[index++].longname != 0) {
 			if (argument[idx] == g_options[index - 1].shortname) {
 				file->flags |= g_options[index - 1].flag;

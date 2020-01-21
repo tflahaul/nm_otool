@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 15:31:26 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/20 16:17:49 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/21 12:22:04 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#include "../include/libsimd.h"
 #include "../include/nm.h"
 #include "../include/errors.h"
 
@@ -41,7 +42,7 @@ static void		ft_ld_symtab64_entries(	__pure struct symtab_command *sycom,
 		HANDLE_GNU_ERROR(-EXIT_FAILURE);
 	for (unsigned int idx = 0; idx < sycom->nsyms; ++idx) {
 		if (!(((struct nlist_64 *)symtab + idx)->n_type & N_STAB)) {
-			file->symarray[file->arrsize].entry ft_header_size= (struct nlist_64 *)symtab + idx;
+			file->symarray[file->arrsize].entry = (struct nlist_64 *)symtab + idx;
 			file->symarray[file->arrsize].name = ft_set_name(file);
 			++file->arrsize;
 		}
@@ -50,15 +51,15 @@ static void		ft_ld_symtab64_entries(	__pure struct symtab_command *sycom,
 
 int			ft_parse_mach_o_file(	__pure struct s_file *file)
 {
-	struct mach_header_64		header;
+	struct mach_header		header;
 	struct load_command		*ldptr;
 
-	memcpy(&header, (void *)file->content, sizeof(struct mach_header_64));
+	ft_memcpy(&header, (void *)file->content, sizeof(struct mach_header));
 	if (header.magic == MH_CIGAM || header.magic == MH_CIGAM_64)
-		swap_mach_header_64(&header, NXHostByteOrder());
+		swap_mach_header(&header, NXHostByteOrder());
 	ldptr = (struct load_command *)(file->content + ft_header_size(header.magic));
 	for (unsigned int idx = 0; idx < header.ncmds && ldptr->cmd != LC_SYMTAB; ++idx) {
-		if (ldptr->cmdsize == 0) {
+		if (__unlikely(ldptr->cmdsize == 0)) {
 			HANDLE_GNU_ERROR(munmap((void *)file->content, file->length));
 			return (-EXIT_FAILURE);
 		}

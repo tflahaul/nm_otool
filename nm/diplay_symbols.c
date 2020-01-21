@@ -6,54 +6,47 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:40:04 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/20 16:00:37 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/21 12:18:01 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "../include/nm.h"
 #include "../include/nm_parsing_options.h"
 
-static inline void	ft_names_only(struct s_symbol *entry)
+#define FORMAT		"%c %s\n"
+
+static inline void	ft_putendl(struct s_symbol *entry)
 {
-	printf("%s\n", entry->name);
+	write(STDOUT_FILENO, entry->name, strlen(entry->name));
+	write(STDOUT_FILENO, "\n", 1);
 }
 
 static inline void	ft_complete_print(struct s_symbol *entry)
 {
-	unsigned int	type;
-
-	if (entry->entry->n_value == 0)
+	if (entry->entry->n_value == 0 && (entry->entry->n_type & N_TYPE) == N_UNDF)
 		printf("                 ");
 	else
 		printf("%016llx ", entry->entry->n_value);
-
-	switch (entry->entry->n_type & N_TYPE)
-	{
-	case N_UNDF:
+	if ((entry->entry->n_type & N_TYPE) == N_UNDF) {
 		if (entry->entry->n_value != 0)
-			type = 'c';
+			printf(FORMAT, 'c', entry->name);
 		else
-			type = 'U';
-		break;
-	case N_PBUD:
-		type = 'u';
-		break;
-	case N_ABS:
-		type = 'a';
-		break;
-	case N_SECT:
-		type = 't';
-		break;
-	case N_INDR:
-		type = 'i';
-		break;
-	default:
-		type = '?';
-		break;
+			printf(FORMAT, 'U', entry->name);
 	}
-	printf("%c %s\n", type, entry->name);
+	else if ((entry->entry->n_type & N_TYPE) == N_PBUD)
+		printf(FORMAT, 'u', entry->name);
+	else if ((entry->entry->n_type & N_TYPE) == N_ABS)
+		printf(FORMAT, 'A', entry->name);
+	else if ((entry->entry->n_type & N_TYPE) == N_INDR)
+		printf(FORMAT, 'I', entry->name);
+	else if ((entry->entry->n_type & N_TYPE) == N_SECT)
+		printf(FORMAT, 'T', entry->name);
+	else
+		printf(FORMAT, '?', entry->name);
 }
 
 void			ft_display_symbols(struct s_file *file)
@@ -62,8 +55,8 @@ void			ft_display_symbols(struct s_file *file)
 
 	if (file->symarray == NULL)
 		return ;
-	funptr = (file->flags & OPTION_J ? &ft_names_only : &ft_complete_print);
-	if (file->flags & OPTION_R) {
+	funptr = (file->flags & OPTION_J ? &ft_putendl : &ft_complete_print);
+	if ((file->flags & OPTION_R) && !(file->flags & OPTION_P)) {
 		while (file->arrsize--)
 			(*funptr)(&(file->symarray[file->arrsize]));
 	}

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/20 15:47:55 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/21 11:45:47 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ struct				s_file
 
 int				ft_parse_fat(struct s_file *);
 int				ft_parse_mach_o_file(struct s_file *);
+int				ft_parse_architecture(struct s_file *);
 void				ft_bubble_sort_symbols(struct s_file *);
 
 #endif /* __NM_H__ */
