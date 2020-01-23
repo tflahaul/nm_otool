@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:31 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/21 11:49:35 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/23 15:57:40 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 #include "../include/nm_parsing_mach_o.h"
 #include "../include/nm_parsing_options.h"
 
-/* TODO:	Gestion des fichiers, fat, archives, dylib et encodage	*/
-/*		en endian CIGAM.					*/
-/*		Affichage.						*/
+#include "../include/nm_parsing_sections.h"
+
+/* TODO:	Gestion des fat, archives, dylib et endian CIGAM.	*/
 /*		Accepter plus d'un binaire				*/
+/*		Petites optimisations					*/
 
 int				main(int argc, char const **argv)
 {

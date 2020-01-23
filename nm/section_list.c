@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nm_parsing_mach_o.h                                :+:      :+:    :+:   */
+/*   section_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/08 09:33:23 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 15:32:40 by thflahau         ###   ########.fr       */
+/*   Created: 2020/01/23 14:17:22 by thflahau          #+#    #+#             */
+/*   Updated: 2020/01/23 15:24:26 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __NM_PARSING_MACH_O_H__
-# define __NM_PARSING_MACH_O_H__
+#include <stdlib.h>
 
-# include "nm.h"
+#include "../include/nm_parsing_sections.h"
 
-int			ft_parse_architecture(struct s_file *);
-int			ft_load_file_content(struct s_file *, char const *);
-void			ft_display_symbols(struct s_file *);
-void			ft_parse_segment(struct s_file *, void *);
-
-#endif /* __NM_PARSING_MACH_O_H__ */
+void			ft_push_sect(struct s_section **head, struct s_section *node)
+{
+	if (head == NULL || *head == NULL)
+		*head = node;
+	else {
+		node->next = *head;
+		*head = node;
+	}
+}

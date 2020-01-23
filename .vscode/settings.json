@@ -1,7 +1,4 @@
 {
 	"editor.rulers": [80, 100],
-	"editor.tabSize": 8,
-	"files.associations": {
-		"errors.h": "c"
-	}
+	"editor.tabSize": 8
 }

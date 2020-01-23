@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 15:31:26 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/21 12:22:04 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/23 15:32:30 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 #include "../include/libsimd.h"
 #include "../include/nm.h"
+#include "../include/nm_parsing_mach_o.h"
 #include "../include/errors.h"
 
 static inline char	*ft_set_name(struct s_file *file)
@@ -49,32 +50,41 @@ static void		ft_ld_symtab64_entries(	__pure struct symtab_command *sycom,
 	}
 }
 
-int			ft_parse_mach_o_file(	__pure struct s_file *file)
+static inline int	ft_correct_command(	struct load_command *ptr,
+						struct s_file *file)
+{
+	if (__unlikely(ptr->cmdsize == 0))
+		return (EXIT_FALSE);
+	if ((uintptr_t)ptr + ptr->cmdsize - (uintptr_t)file->content > file->length)
+		return (EXIT_FALSE);
+	if ((ptr->cmd == LC_ENCRYPTION_INFO || ptr->cmd == LC_ENCRYPTION_INFO_64)
+		&& ((struct encryption_info_command *)ptr)->cryptid != 0)
+		return (EXIT_FALSE);
+	return (EXIT_TRUE);
+}
+
+void			ft_parse_mach_o_file(	__pure struct s_file *file,
+						__pure void *content)
 {
 	struct mach_header		header;
 	struct load_command		*ldptr;
 
-	ft_memcpy(&header, (void *)file->content, sizeof(struct mach_header));
+	ft_memcpy(&header, (void *)content, sizeof(struct mach_header));
 	if (header.magic == MH_CIGAM || header.magic == MH_CIGAM_64)
 		swap_mach_header(&header, NXHostByteOrder());
-	ldptr = (struct load_command *)(file->content + ft_header_size(header.magic));
-	for (unsigned int idx = 0; idx < header.ncmds && ldptr->cmd != LC_SYMTAB; ++idx) {
-		if (__unlikely(ldptr->cmdsize == 0)) {
-			HANDLE_GNU_ERROR(munmap((void *)file->content, file->length));
-			return (-EXIT_FAILURE);
+	ldptr = (struct load_command *)((uintptr_t)content + ft_header_size(header.magic));
+	for (unsigned int index = 0; index < header.ncmds; ++index) {
+		if (ft_correct_command(ldptr, file) == EXIT_FALSE) {
+			FREE_ON_ERROR(file->arrsize, file->symarray);
+			HANDLE_GNU_ERROR(munmap(file->content, file->length));
+			HANDLE_GNU_ERROR(-EXIT_FAILURE);
 		}
-		if ((uintptr_t)ldptr + ldptr->cmdsize - (uintptr_t)file->content > file->length) {
-			HANDLE_GNU_ERROR(munmap((void *)file->content, file->length));
-			return (-EXIT_FAILURE);
+		if (ldptr->cmd == LC_SYMTAB) {
+			file->strtab = (void *)((uintptr_t)content + ((struct symtab_command *)ldptr)->stroff);
+			ft_ld_symtab64_entries((struct symtab_command *)ldptr, file);
 		}
-		if ((ldptr->cmd == LC_ENCRYPTION_INFO || ldptr->cmd == LC_ENCRYPTION_INFO_64) \
-			&& ((struct encryption_info_command *)ldptr)->cryptid != 0) {
-			HANDLE_GNU_ERROR(munmap((void *)file->content, file->length));
-			return (-EXIT_FAILURE);
-		}
+		else if (ldptr->cmd == LC_SEGMENT || ldptr->cmd == LC_SEGMENT_64)
+			ft_parse_segment(file, (struct segment_command *)ldptr);
 		ldptr = (struct load_command *)((uintptr_t)ldptr + ldptr->cmdsize);
 	}
-	file->strtab = (void *)(file->content + ((struct symtab_command *)ldptr)->stroff);
-	ft_ld_symtab64_entries((struct symtab_command *)ldptr, file);
-	return (EXIT_SUCCESS);
 }

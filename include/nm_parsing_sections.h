@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nm_parsing_mach_o.h                                :+:      :+:    :+:   */
+/*   nm_parsing_sections.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/08 09:33:23 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 15:32:40 by thflahau         ###   ########.fr       */
+/*   Created: 2020/01/23 14:10:41 by thflahau          #+#    #+#             */
+/*   Updated: 2020/01/23 15:24:38 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __NM_PARSING_MACH_O_H__
-# define __NM_PARSING_MACH_O_H__
+#ifndef __NM_PARSING_SECTIONS_H__
+# define __NM_PARSING_SECTIONS_H__
 
-# include "nm.h"
+/*
+**	@architecture:	LC_SEGMENT or LC_SEGMENT_64
+**	@offset:	Section header offset
+*/
+struct				s_section
+{
+	int			id;
+	int			architecture;
+	void			*offset;
+	struct s_section	*next;
+};
 
-int			ft_parse_architecture(struct s_file *);
-int			ft_load_file_content(struct s_file *, char const *);
-void			ft_display_symbols(struct s_file *);
-void			ft_parse_segment(struct s_file *, void *);
+void			ft_push_sect(struct s_section **, struct s_section *);
 
-#endif /* __NM_PARSING_MACH_O_H__ */
+#endif /* __NM_PARSING_SECTIONS_H__ */
