@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 14:17:22 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 15:24:26 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/23 16:05:41 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,16 @@ void			ft_push_sect(struct s_section **head, struct s_section *node)
 	else {
 		node->next = *head;
 		*head = node;
+	}
+}
+
+void			ft_free_list(struct s_section *head)
+{
+	struct s_section	*node = head;
+
+	while (head != NULL) {
+		node = head->next;
+		free((void *)head);
+		head = node;
 	}
 }

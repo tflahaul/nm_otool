@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:31 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 15:57:40 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/23 16:06:26 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 /* TODO:	Gestion des fat, archives, dylib et endian CIGAM.	*/
 /*		Accepter plus d'un binaire				*/
-/*		Petites optimisations					*/
+/*		Petites optimisations à prévoir				*/
 
 int				main(int argc, char const **argv)
 {
@@ -38,5 +38,6 @@ int				main(int argc, char const **argv)
 
 	HANDLE_GNU_ERROR(munmap((void *)file.content, file.length));
 	free((void *)file.symarray);
+	ft_free_list(file.lsthead);
 	return (EXIT_SUCCESS);
 }
