@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:40:04 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/24 13:49:54 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/24 15:43:35 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static inline void	ft_complete_print(	struct s_mach_section *mach,
 		printf(FORMAT, 'I', entry->name);
 	else if ((entry->entry->n_type & N_TYPE) == N_SECT) {
 		type = ft_get_char(ft_find_section(mach->sectlist, entry->entry->n_sect));
-		if (!(entry->entry->n_type & N_EXT))
+		if (type != '?' && !(entry->entry->n_type & N_EXT))
 			type -= ('A' - 'a');
 		printf(FORMAT, type, entry->name);
 	}

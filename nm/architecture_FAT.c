@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_FAT.c                                      :+:      :+:    :+:   */
+/*   architecture_FAT.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 15:31:04 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/24 14:21:33 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/24 15:22:09 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "../include/nm.h"
 #include "../include/errors.h"

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 09:19:28 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/21 12:20:31 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/24 15:18:23 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,6 @@ int				ft_parse_options(struct s_file *file, int argc,
 			HANDLE_GNU_ERROR(-EXIT_FAILURE);
 		++index;
 	}
-	file->filename = (char *)argv[index];
+	file->filename = (char **)&(argv[index]);
 	return (EXIT_SUCCESS);
 }
