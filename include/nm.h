@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 15:07:07 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/24 14:08:40 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,26 @@ struct				s_symbol
 	struct nlist_64		*entry;
 };
 
+struct				s_mach_section
+{
+	struct s_section	*sectlist;
+	struct s_symbol		*symarray;
+	size_t			arrsize;
+	void			*strtab;
+	void			*offset;
+};
+
 struct				s_file
 {
-	struct s_section	*lsthead;
-	struct s_symbol		*symarray;
-	char			*filename;
 	unsigned char		*content;
-	void			*strtab;
+	char			*filename;
 	size_t			length;
-	size_t			arrsize;
 	size_t			flags;
 };
 
-int				ft_parse_fat(struct s_file *);
-int				ft_parse_architecture(struct s_file *);
-void				ft_bubble_sort_symbols(struct s_file *);
-void				ft_parse_mach_o_file(struct s_file *, void *);
+int		ft_parse_architecture(struct s_file *);
+int		ft_handle_FAT_architecture(struct s_file *);
+int		ft_parse_mach_o_file(struct s_mach_section *, struct s_file *);
+void		ft_bubble_sort_symbols(struct s_mach_section *, struct s_file *);
 
 #endif /* __NM_H__ */

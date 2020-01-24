@@ -6,18 +6,16 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 12:19:58 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/20 16:00:15 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/24 13:43:51 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <string.h>
 
+#include "../include/errors.h"
 #include "../include/nm.h"
 #include "../include/nm_parsing_options.h"
-
-#define EXIT_FALSE	0
-#define EXIT_TRUE	1
 
 static void		ft_swap_entries(struct s_symbol *e1, struct s_symbol *e2)
 {
@@ -54,16 +52,16 @@ static int		numeric_cmp(struct s_symbol *e1, struct s_symbol *e2)
 **	Does a bubble sort on the symbol array. Sorting time is O(n^2) on
 **	average which is slow but sufficient in most cases.
 */
-void			ft_bubble_sort_symbols(struct s_file *file)
+void			ft_bubble_sort_symbols(struct s_mach_section *mach, struct s_file *file)
 {
 	int		(*funptr)(struct s_symbol *, struct s_symbol *);
 
-	if (file->symarray == NULL || file->flags & OPTION_P)
+	if (mach->symarray == NULL || (file->flags & OPTION_P))
 		return ;
-	funptr = file->flags & OPTION_N ? &numeric_cmp : &alpha_cmp;
-	for (unsigned int idx = 0; idx < file->arrsize - 1;) {
-		if ((*funptr)(&(file->symarray[idx]), &(file->symarray[idx + 1]))) {
-			ft_swap_entries(&(file->symarray[idx]), &(file->symarray[idx + 1]));
+	funptr = (file->flags & OPTION_N) ? &numeric_cmp : &alpha_cmp;
+	for (unsigned int idx = 0; idx < mach->arrsize - 1;) {
+		if ((*funptr)(&(mach->symarray[idx]), &(mach->symarray[idx + 1]))) {
+			ft_swap_entries(&(mach->symarray[idx]), &(mach->symarray[idx + 1]));
 			idx = 0;
 		}
 		else

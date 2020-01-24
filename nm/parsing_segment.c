@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 12:30:12 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 15:53:05 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/24 14:11:31 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,19 @@ static struct s_section			*ft_allocate_new_section(void *ptr,
 	return (node);
 }
 
-static inline void			ft_new_section(	struct s_file *file,
-							void *section,
-							int arch)
+static inline void			ft_new_section(	struct s_mach_section *mach,
+							void *section, int arch)
 {
 	static int			id;
 	struct s_section		*node = NULL;
 
 	if ((node = ft_allocate_new_section(section, arch, id + 1)) != NULL) {
-		ft_push_sect(&(file->lsthead), node);
+		ft_push_sect(&(mach->sectlist), node);
 		++id;
 	}
 }
 
-void					ft_parse_segment(struct s_file *file,
+void					ft_parse_segment(struct s_mach_section *mach,
 							 void *ptr)
 {
 	struct segment_command		*seg32;
@@ -55,7 +54,7 @@ void					ft_parse_segment(struct s_file *file,
 		seg64 = (struct segment_command_64 *)ptr;
 		section64 = (struct section_64 *)((uintptr_t)ptr + sizeof(struct segment_command_64));
 		for (unsigned int index = 0; index < seg64->nsects; ++index) {
-			ft_new_section(file, section64, LC_SEGMENT_64);
+			ft_new_section(mach, section64, LC_SEGMENT_64);
 			++section64;
 		}
 	}
@@ -64,7 +63,7 @@ void					ft_parse_segment(struct s_file *file,
 		seg32 = (struct segment_command *)ptr;
 		section = (struct section *)((uintptr_t)ptr + sizeof(struct segment_command));
 		for (unsigned int index = 0; index < seg32->nsects; ++index) {
-			ft_new_section(file, section, LC_SEGMENT);
+			ft_new_section(mach, section, LC_SEGMENT);
 			++section;
 		}
 	}

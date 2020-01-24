@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:40:04 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 15:54:17 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/24 13:49:54 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static struct s_section		*ft_find_section(struct s_section *head, uint8_t id)
 	return (NULL);
 }
 
-static int		ft_get_char(struct s_section *section)
+static int		ft_get_char(	struct s_section *section	)
 {
 	int		ret;
 	char		*name;
@@ -54,16 +54,17 @@ static int		ft_get_char(struct s_section *section)
 	return (ret);
 }
 
-static inline void	ft_putendl(__unused struct s_file *file, struct s_symbol *entry)
+static inline void	ft_putendl(	__unused struct s_mach_section *mach,
+					struct s_symbol *entry	)
 {
 	write(STDOUT_FILENO, entry->name, strlen(entry->name));
 	write(STDOUT_FILENO, "\n", 1);
 }
 
-static inline void	ft_complete_print(struct s_file *file, struct s_symbol *entry)
+static inline void	ft_complete_print(	struct s_mach_section *mach,
+						struct s_symbol *entry)
 {
-	int			type;
-	struct s_section	*sect;
+	int		type;
 
 	if (entry->entry->n_value == 0 && (entry->entry->n_type & N_TYPE) == N_UNDF)
 		printf("                 ");
@@ -82,8 +83,7 @@ static inline void	ft_complete_print(struct s_file *file, struct s_symbol *entry
 	else if ((entry->entry->n_type & N_TYPE) == N_INDR)
 		printf(FORMAT, 'I', entry->name);
 	else if ((entry->entry->n_type & N_TYPE) == N_SECT) {
-		sect = ft_find_section(file->lsthead, entry->entry->n_sect);
-		type = ft_get_char(sect);
+		type = ft_get_char(ft_find_section(mach->sectlist, entry->entry->n_sect));
 		if (!(entry->entry->n_type & N_EXT))
 			type -= ('A' - 'a');
 		printf(FORMAT, type, entry->name);
@@ -92,19 +92,20 @@ static inline void	ft_complete_print(struct s_file *file, struct s_symbol *entry
 		printf(FORMAT, '?', entry->name);
 }
 
-void			ft_display_symbols(struct s_file *file)
+void				ft_display_symbols(	struct s_mach_section *mach,
+							struct s_file *file)
 {
-	void		(*funptr)(struct s_file *, struct s_symbol *);
+	void		(*funptr)(struct s_mach_section *, struct s_symbol *);
 
-	if (file->symarray == NULL)
+	if (mach->symarray == NULL)
 		return ;
-	funptr = (file->flags & OPTION_J ? &ft_putendl : &ft_complete_print);
+	funptr = (file->flags & OPTION_J) ? &ft_putendl : &ft_complete_print;
 	if ((file->flags & OPTION_R) && !(file->flags & OPTION_P)) {
-		while (file->arrsize--)
-			(*funptr)(file, &(file->symarray[file->arrsize]));
+		while (mach->arrsize--)
+			(*funptr)(mach, &(mach->symarray[mach->arrsize]));
 	}
 	else {
-		for (unsigned int index = 0; index < file->arrsize; ++index)
-			(*funptr)(file, &(file->symarray[index]));
+		for (unsigned int index = 0; index < mach->arrsize; ++index)
+			(*funptr)(mach, &(mach->symarray[index]));
 	}
 }
