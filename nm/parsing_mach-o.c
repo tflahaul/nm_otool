@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 15:31:26 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/24 13:38:42 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/25 13:35:30 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void			ft_ld_symtab64_entries(	struct symtab_command *sycom,
 	}
 }
 
-static inline int		ft_correct_command(	struct load_command *ptr,
+static inline int		ft_parsable_command(	struct load_command *ptr,
 							struct s_file *file)
 {
 	if (__unlikely(ptr->cmdsize == 0))
@@ -74,7 +74,7 @@ int				ft_parse_mach_o_file(	struct s_mach_section *mach,
 		swap_mach_header(&header, NXHostByteOrder());
 	ldptr = (struct load_command *)((uintptr_t)mach->offset + ft_header_size(header.magic));
 	for (unsigned int index = 0; index < header.ncmds; ++index) {
-		if (ft_correct_command(ldptr, file) == EXIT_FALSE) {
+		if (ft_parsable_command(ldptr, file) == EXIT_FALSE) {
 			FREE_ON_ERROR(mach->arrsize, mach->symarray);
 			return (-EXIT_FAILURE);
 		}
