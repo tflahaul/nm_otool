@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:38 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/27 12:54:54 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/27 14:14:55 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void				ft_parse_mach_section(	struct s_file *file,
 		HANDLE_GNU_ERROR(munmap(file->content, file->length));
 		HANDLE_GNU_ERROR(-EXIT_FAILURE);
 	}
-	ft_bubble_sort_symbols(&mach, file);
+	ft_quicksort_symbols(&mach, file);
 	ft_display_symbols(&mach, file);
 	free((void *)mach.symarray);
 	ft_free_list(mach.sectlist);

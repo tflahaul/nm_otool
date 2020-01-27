@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:31 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/27 12:55:09 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/27 14:17:42 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,17 @@
 
 int				main(int argc, char const **argv)
 {
+	int			mbin;
 	struct s_file		file;
 
+	mbin = 0;
 	memset(&file, 0, sizeof(struct s_file));
 	HANDLE_GNU_ERROR(ft_parse_options(&file, argc, argv));
+	if (file.filename != NULL && *(file.filename + 1) != NULL)
+		mbin = 1;
 	while (file.filename != NULL && *(file.filename) != NULL) {
+		if (mbin != 0)
+			printf("\n%s:\n", *(file.filename));
 		HANDLE_GNU_ERROR(ft_load_file_content(&file, *(file.filename++)));
 		HANDLE_GNU_ERROR(ft_parse_architecture(&file));
 		HANDLE_GNU_ERROR(munmap((void *)file.content, file.length));

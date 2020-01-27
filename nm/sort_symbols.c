@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 12:19:58 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/27 13:27:27 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/27 14:14:13 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,20 @@ static int		ft_strcmp(char const *s1, char const *s2)
 	return ((*s1) - (*s2));
 }
 
-static int		alpha_cmp(struct s_symbol *e1, struct s_symbol *e2)
-{
-	return ((ft_strcmp(e1->name, e2->name) > 0) ? EXIT_TRUE : EXIT_FALSE);
-}
-
 static int		numeric_cmp(struct s_symbol *e1, struct s_symbol *e2)
 {
 	return (e1->entry->n_value > e2->entry->n_value);
+}
+
+static int		alpha_cmp(struct s_symbol *e1, struct s_symbol *e2)
+{
+	int const	ret = ft_strcmp(e1->name, e2->name);
+
+	if (ret < 0)
+		return (EXIT_FALSE);
+	else if (ret > 0)
+		return (EXIT_TRUE);
+	return (numeric_cmp(e1, e2));
 }
 
 void			quicksort(	struct s_symbol *tab,
@@ -72,7 +78,8 @@ void			quicksort(	struct s_symbol *tab,
 	}
 }
 
-void			ft_bubble_sort_symbols(struct s_mach_section *mach, struct s_file *file)
+void			ft_quicksort_symbols(	struct s_mach_section *mach,
+						struct s_file *file	)
 {
 	int		(*funptr)(struct s_symbol *, struct s_symbol *);
 
