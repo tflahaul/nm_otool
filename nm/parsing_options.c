@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/14 09:19:28 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/24 15:18:23 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/27 12:58:14 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,10 @@ int				ft_parse_options(struct s_file *file, int argc,
 		else if (ft_short_option_lookup(file, ft_option_trim(argv[index])) != EXIT_SUCCESS)
 			HANDLE_GNU_ERROR(-EXIT_FAILURE);
 		++index;
+	}
+	if (argv[index] == NULL) {
+		argv[index] = "a.out";
+		argv[index + 1] = NULL;
 	}
 	file->filename = (char **)&(argv[index]);
 	return (EXIT_SUCCESS);

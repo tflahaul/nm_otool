@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:38 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/25 13:41:11 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/27 12:54:54 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ int				ft_load_file_content(	struct s_file *file,
 }
 
 void				ft_parse_mach_section(	struct s_file *file,
-							void *offset_to_file)
+							uintptr_t offset_to_file)
 {
 	struct s_mach_section	mach;
 
 	memset(&mach, 0, sizeof(struct s_mach_section));
-	mach.offset = offset_to_file;
+	mach.offset = (void *)((uintptr_t)file->content + offset_to_file);
 	if (ft_parse_mach_o_file(&mach, file) != EXIT_SUCCESS) {
 		HANDLE_GNU_ERROR(munmap(file->content, file->length));
 		HANDLE_GNU_ERROR(-EXIT_FAILURE);
@@ -60,10 +60,10 @@ void				ft_parse_mach_section(	struct s_file *file,
 
 int				ft_parse_architecture(	struct s_file *file)
 {
-	uint32_t const		mc = ((uint32_t *)file->content)[0];
+	uint32_t const		mc = *((uint32_t *)file->content);
 
 	if (mc == MH_CIGAM || mc == MH_CIGAM_64 || mc == MH_MAGIC || mc == MH_MAGIC_64)
-		ft_parse_mach_section(file, (void *)file->content);
+		ft_parse_mach_section(file, 0);
 	else if (mc == FAT_CIGAM || mc == FAT_CIGAM_64 || mc == FAT_MAGIC || mc == FAT_MAGIC_64)
 		ft_handle_FAT_architecture(file);
 	else {

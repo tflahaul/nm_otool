@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/24 15:15:29 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/27 12:38:26 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ struct				s_mach_section
 struct				s_file
 {
 	char			**filename;
-	unsigned char		*content;
+	void			*content;
 	size_t			length;
 	size_t			flags;
 };

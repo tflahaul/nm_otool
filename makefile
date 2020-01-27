@@ -6,7 +6,7 @@
 #    By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 22:08:10 by abrunet           #+#    #+#              #
-#    Updated: 2020/01/23 15:33:14 by thflahau         ###   ########.fr        #
+#    Updated: 2020/01/27 12:58:45 by thflahau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ CFLAGS		=	-Wall					\
 			-msse4					\
 			-Wpadded				\
 			-pedantic				\
-			-O0 -g3	#debug
+			-O1
 
 INCFLAG		=	-I $(HDR)
 
