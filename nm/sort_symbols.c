@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 12:19:58 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/24 13:43:51 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/27 13:27:27 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,6 @@
 #include "../include/errors.h"
 #include "../include/nm.h"
 #include "../include/nm_parsing_options.h"
-
-static void		ft_swap_entries(struct s_symbol *e1, struct s_symbol *e2)
-{
-	struct s_symbol	temp;
-
-	memcpy(&temp, e1, sizeof(struct s_symbol));
-	memcpy(e1, e2, sizeof(struct s_symbol));
-	memcpy(e2, &temp, sizeof(struct s_symbol));
-}
 
 static int		ft_strcmp(char const *s1, char const *s2)
 {
@@ -48,10 +39,39 @@ static int		numeric_cmp(struct s_symbol *e1, struct s_symbol *e2)
 	return (e1->entry->n_value > e2->entry->n_value);
 }
 
-/*
-**	Does a bubble sort on the symbol array. Sorting time is O(n^2) on
-**	average which is slow but sufficient in most cases.
-*/
+void			quicksort(	struct s_symbol *tab,
+					int first,
+					int last,
+					int (*cmp)(struct s_symbol *, struct s_symbol *))
+{
+	int		i;
+	int		j;
+	int		pivot;
+	struct s_symbol temp;
+
+	if (first < last) {
+		pivot = first;
+		i = first;
+		j = last;
+		while (i < j) {
+			while(!cmp(&(tab[i]), &(tab[pivot])) && i < last)
+				i++;
+			while (cmp(&(tab[j]), &(tab[pivot])))
+				j--;
+			if (i < j) {
+				memcpy(&temp, &(tab[i]), sizeof(struct s_symbol));
+				memcpy(&(tab[i]), &(tab[j]), sizeof(struct s_symbol));
+				memcpy(&(tab[j]), &temp, sizeof(struct s_symbol));
+			}
+		}
+		memcpy(&temp, &(tab[pivot]), sizeof(struct s_symbol));
+		memcpy(&(tab[pivot]), &(tab[j]), sizeof(struct s_symbol));
+		memcpy(&(tab[j]), &temp, sizeof(struct s_symbol));
+		quicksort(tab, first, j - 1, cmp);
+		quicksort(tab, j + 1, last, cmp);
+	}
+}
+
 void			ft_bubble_sort_symbols(struct s_mach_section *mach, struct s_file *file)
 {
 	int		(*funptr)(struct s_symbol *, struct s_symbol *);
@@ -59,12 +79,5 @@ void			ft_bubble_sort_symbols(struct s_mach_section *mach, struct s_file *file)
 	if (mach->symarray == NULL || (file->flags & OPTION_P))
 		return ;
 	funptr = (file->flags & OPTION_N) ? &numeric_cmp : &alpha_cmp;
-	for (unsigned int idx = 0; idx < mach->arrsize - 1;) {
-		if ((*funptr)(&(mach->symarray[idx]), &(mach->symarray[idx + 1]))) {
-			ft_swap_entries(&(mach->symarray[idx]), &(mach->symarray[idx + 1]));
-			idx = 0;
-		}
-		else
-			++idx;
-	}
+	quicksort(mach->symarray, 0, mach->arrsize - 1, funptr);
 }
