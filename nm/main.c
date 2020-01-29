@@ -6,11 +6,12 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:31 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/27 14:17:42 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/27 14:21:08 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
+#include <stdio.h>
 #include <sys/mman.h>
 
 #include "../include/nm.h"

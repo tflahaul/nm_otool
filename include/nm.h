@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/27 14:14:23 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/29 11:42:15 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,19 @@ struct				s_symbol
 	struct nlist_64		*entry;
 };
 
+#pragma pack(push, 4)
+
 struct				s_mach_section
 {
 	struct s_section	*sectlist;
 	struct s_symbol		*symarray;
 	size_t			arrsize;
+	uint32_t		magic;
 	void			*strtab;
 	void			*offset;
 };
+
+#pragma pack(pop)
 
 struct				s_file
 {

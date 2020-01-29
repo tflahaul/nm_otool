@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 15:31:26 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/25 13:35:30 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/29 11:59:47 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static inline size_t		ft_header_size(uint32_t mg)
 	return (sizeof(struct mach_header_64));
 }
 
-static void			ft_ld_symtab64_entries(	struct symtab_command *sycom,
+static void			ft_ld_symtab_entries(	struct symtab_command *sycom,
 							struct s_mach_section *mach)
 {
 	void const		*symtab = (void *)((uintptr_t)mach->offset + sycom->symoff);
@@ -42,10 +42,19 @@ static void			ft_ld_symtab64_entries(	struct symtab_command *sycom,
 	if (!(mach->symarray = (struct s_symbol *)malloc(sizeof(struct s_symbol) * sycom->nsyms)))
 		HANDLE_GNU_ERROR(-EXIT_FAILURE);
 	for (unsigned int idx = 0; idx < sycom->nsyms; ++idx) {
-		if (!(((struct nlist_64 *)symtab + idx)->n_type & N_STAB)) {
-			mach->symarray[mach->arrsize].entry = (struct nlist_64 *)symtab + idx;
-			mach->symarray[mach->arrsize].name = ft_set_name(mach);
-			++mach->arrsize;
+		if (mach->magic == MH_MAGIC || mach->magic == MH_CIGAM) {
+			if (!(((struct nlist *)symtab + idx)->n_type & N_STAB)) {
+				mach->symarray[mach->arrsize].entry = (struct nlist_64 *)((struct nlist *)symtab + idx);
+				mach->symarray[mach->arrsize].name = ft_set_name(mach);
+				++mach->arrsize;
+			}
+		}
+		else {
+			if (!(((struct nlist_64 *)symtab + idx)->n_type & N_STAB)) {
+				mach->symarray[mach->arrsize].entry = (struct nlist_64 *)symtab + idx;
+				mach->symarray[mach->arrsize].name = ft_set_name(mach);
+				++mach->arrsize;
+			}
 		}
 	}
 }
@@ -80,7 +89,7 @@ int				ft_parse_mach_o_file(	struct s_mach_section *mach,
 		}
 		if (ldptr->cmd == LC_SYMTAB) {
 			mach->strtab = (void *)((uintptr_t)mach->offset + ((struct symtab_command *)ldptr)->stroff);
-			ft_ld_symtab64_entries((struct symtab_command *)ldptr, mach);
+			ft_ld_symtab_entries((struct symtab_command *)ldptr, mach);
 		}
 		else if (ldptr->cmd == LC_SEGMENT || ldptr->cmd == LC_SEGMENT_64)
 			ft_parse_segment(mach, (struct segment_command *)ldptr);

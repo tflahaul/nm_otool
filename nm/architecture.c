@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:38 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/27 14:14:55 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/01/29 11:33:04 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void				ft_parse_mach_section(	struct s_file *file,
 
 	memset(&mach, 0, sizeof(struct s_mach_section));
 	mach.offset = (void *)((uintptr_t)file->content + offset_to_file);
+	mach.magic = ((uint32_t *)mach.offset)[0];
 	if (ft_parse_mach_o_file(&mach, file) != EXIT_SUCCESS) {
 		HANDLE_GNU_ERROR(munmap(file->content, file->length));
 		HANDLE_GNU_ERROR(-EXIT_FAILURE);
