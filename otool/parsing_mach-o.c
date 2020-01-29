@@ -5,15 +5,20 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/24 16:04:33 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/24 16:19:16 by thflahau         ###   ########.fr       */
+/*   Created: 2020/01/20 15:31:26 by thflahau          #+#    #+#             */
+/*   Updated: 2020/01/29 14:39:58 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <stdint.h>
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #include "../include/nm.h"
+#include "../include/otool_parsing.h"
 #include "../include/errors.h"
 
 static inline size_t		ft_header_size(uint32_t mg)
@@ -23,10 +28,10 @@ static inline size_t		ft_header_size(uint32_t mg)
 	return (sizeof(struct mach_header_64));
 }
 
-static inline int		ft_correct_command(	struct load_command *ptr,
+static inline int		ft_parsable_command(	struct load_command *ptr,
 							struct s_file *file)
 {
-	if (__unlikely(ptr->cmdsize == 0))
+	if (ptr->cmdsize == 0)
 		return (EXIT_FALSE);
 	if ((uintptr_t)ptr + ptr->cmdsize - (uintptr_t)file->content > file->length)
 		return (EXIT_FALSE);
@@ -36,41 +41,24 @@ static inline int		ft_correct_command(	struct load_command *ptr,
 	return (EXIT_TRUE);
 }
 
-static void			ft_dump_text_section(	struct s_mach_section *mach,
-							size_t offset, size_t size)
-{
-	void			*ptr = mach->offset + offset;
-
-	for (unsigned int index = 0; index < size; ++index) {
-		printf("%#x ", (int)((unsigned char *)ptr)[index]);
-		if (!(index % 32))
-			printf("\n");
-	}
-}
-
-// pas tres lisible tout ça
-int				foo(struct s_mach_section *mach, struct s_file *file)
+int				ft_parse_mach_o_file(	struct s_mach_section *mach,
+							__pure struct s_file *file)
 {
 	struct mach_header	header;
 	struct load_command	*ldptr;
 
-	ft_memcpy(&header, (void *)mach->offset, sizeof(struct mach_header));
+	memcpy(&header, (void *)mach->offset, sizeof(struct mach_header));
 	if (header.magic == MH_CIGAM || header.magic == MH_CIGAM_64)
 		swap_mach_header(&header, NXHostByteOrder());
 	ldptr = (struct load_command *)((uintptr_t)mach->offset + ft_header_size(header.magic));
 	for (unsigned int index = 0; index < header.ncmds; ++index) {
-		if (ft_correct_command(ldptr, file) == EXIT_FALSE) {
+		if (ft_parsable_command(ldptr, file) == EXIT_FALSE) {
 			FREE_ON_ERROR(mach->arrsize, mach->symarray);
 			return (-EXIT_FAILURE);
 		}
-		else if (ldptr->cmd == LC_SEGMENT || ldptr->cmd == LC_SEGMENT_64) {
-			if ((ldptr->cmd == LC_SEGMENT_64) && !strcmp(((struct segment_command_64 *)ldptr)->segname, SEG_TEXT))
-				ft_dump_text_section(mach, ((struct segment_command_64 *)ldptr)->fileoff, \
-					((struct segment_command_64 *)ldptr)->filesize);
-			else if (!strcmp(((struct segment_command *)ldptr)->segname , SEG_TEXT))
-				ft_dump_text_section(mach, ((struct segment_command *)ldptr)->fileoff, \
-					((struct segment_command *)ldptr)->filesize);
-		}
+		if ((ldptr->cmd == LC_SEGMENT) || (ldptr->cmd == LC_SEGMENT_64))
+			if (ft_parse_segment(mach, (void *)ldptr) == EXIT_SUCCESS)
+				break ;
 		ldptr = (struct load_command *)((uintptr_t)ldptr + ldptr->cmdsize);
 	}
 	return (EXIT_SUCCESS);
