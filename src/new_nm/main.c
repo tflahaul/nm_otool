@@ -10,30 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
-#include <stdio.h>
-#include <sys/mman.h>
-
-#include "../include/nm.h"
-#include "../include/errors.h"
-#include "../include/nm_parsing_mach_o.h"
-#include "../include/nm_parsing_options.h"
+#include "../../include/arguments.h"
+#include "../../include/errors.h"
+#include "../../include/nm.h"
 
 int				main(int argc, char const **argv)
 {
-	int			mbin = 0;
-	struct s_file		file;
+	struct s_arguments	args;
+	struct s_file_infos	file;
 
-	memset(&file, 0, sizeof(struct s_file));
-	HANDLE_GNU_ERROR(ft_parse_options(&file, argc, argv));
-	if (file.filename != NULL && *(file.filename + 1) != NULL)
-		mbin = 1;
-	while (file.filename != NULL && *(file.filename) != NULL) {
-		if (mbin != 0)
-			printf("\n%s:\n", *(file.filename));
-		HANDLE_GNU_ERROR(ft_load_file_content(&file, *(file.filename++)));
-		HANDLE_GNU_ERROR(ft_parse_architecture(&file));
-		HANDLE_GNU_ERROR(munmap((void *)file.content, file.length));
+	parse_arguments(&args, argc, argv);
+	for (unsigned int index = 0; index < args.size; ++index) {
+		HANDLE_GNU_ERROR(map_into_memory(&file, args.arguments[index]));
+		HANDLE_GNU_ERROR(munmap(file.head, file.length));
 	}
 	return (EXIT_SUCCESS);
 }

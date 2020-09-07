@@ -10,13 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC		=	gcc
-
 NAME		=	ft_nm
 
 #######   DIRECTORIES   #######
 HDR		=	include
-SRCDIR		=	nm
+SRCDIR		=	src/nm
 OBJDIR		=	obj
 
 DIRS := $(patsubst $(SRCDIR)%, $(OBJDIR)%, $(shell find $(SRCDIR) -type d))
@@ -25,10 +23,8 @@ DIRS := $(patsubst $(SRCDIR)%, $(OBJDIR)%, $(shell find $(SRCDIR) -type d))
 CFLAGS		=	-Wall					\
 			-Wextra					\
 			-Werror					\
-			-msse4					\
 			-Wpadded				\
-			-pedantic				\
-			-O1
+			-pedantic
 
 INCFLAG		=	-I $(HDR)
 

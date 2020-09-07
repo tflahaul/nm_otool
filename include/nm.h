@@ -22,7 +22,7 @@
 #  error "Systems other than macOS are not supported"
 # endif /* __APPLE__ */
 
-# define PROGRAM_NAME(p)	(p ? p : "a.out")
+# include <stdint.h>
 
 struct				s_symbol
 {
@@ -44,14 +44,13 @@ struct				s_mach_section
 
 #pragma pack(pop)
 
-struct				s_file
+struct				s_file_infos
 {
-	char			**filename;
-	void			*content;
-	size_t			length;
-	size_t			flags;
+	void			*head;
+	uintptr_t		length;
 };
 
+int		map_into_memory(struct s_file_infos *, char const *);
 int		ft_parse_architecture(struct s_file *);
 int		ft_handle_FAT_architecture(struct s_file *);
 int		ft_parse_mach_o_file(struct s_mach_section *, struct s_file *);
