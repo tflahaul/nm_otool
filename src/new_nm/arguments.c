@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 12:43:43 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/08 19:26:37 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 static struct s_options		g_options[] = {
 	{"-undefined-only", OPTION_U,    no_argument, 'u'},
-	{"-defined-only",   OPTION_CAPU, no_argument, 'U'},
+	{"-defined-only",   OPTION_CAPU, no_argument, 'd'},
 	{"-numeric-sort",   OPTION_N,    no_argument, 'n'},
 	{"-reverse-sort",   OPTION_R,    no_argument, 'r'},
 	{"-names-only",     OPTION_J,    no_argument, 'j'},
@@ -32,10 +32,10 @@ static void			usage(char const *filename)
 	int			fd, bytes;
 	char			buffer[BUFSIZ];
 
-	HANDLE_NEG_ERROR((fd = open(filename, O_RDONLY)))
+	HANDLE_NEG_ERROR((fd = open(filename, O_RDONLY)), strerror(errno))
 	while ((bytes = read(fd, &buffer, BUFSIZ)) > 0)
 		write(STDOUT_FILENO, &buffer, bytes);
-	HANDLE_GNU_ERROR(close(fd));
+	HANDLE_GNU_ERROR(close(fd), strerror(errno));
 	exit(EXIT_FAILURE);
 }
 

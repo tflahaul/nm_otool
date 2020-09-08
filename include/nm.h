@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/29 11:42:15 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/08 19:26:20 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #  include <mach-o/swap.h>
 #  include <mach-o/fat.h>
 #  include <mach-o/nlist.h>
-# else
-#  error "Systems other than macOS are not supported"
+//# else
+//#  error "Systems other than macOS are not supported"
 # endif /* __APPLE__ */
 
 # include <stdint.h>
@@ -36,7 +36,7 @@ struct				s_mach_section
 {
 	struct s_section	*sectlist;
 	struct s_symbol		*symarray;
-	size_t			arrsize;
+	uint64_t		arrsize;
 	uint32_t		magic;
 	void			*strtab;
 	void			*offset;
@@ -51,9 +51,6 @@ struct				s_file_infos
 };
 
 int		map_into_memory(struct s_file_infos *, char const *);
-int		ft_parse_architecture(struct s_file *);
-int		ft_handle_FAT_architecture(struct s_file *);
-int		ft_parse_mach_o_file(struct s_mach_section *, struct s_file *);
-void		ft_quicksort_symbols(struct s_mach_section *, struct s_file *);
+int		architecture_dispatch(struct s_file_infos *);
 
 #endif /* __NM_H__ */

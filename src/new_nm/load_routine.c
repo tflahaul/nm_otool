@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_into_memory.c                                  :+:      :+:    :+:   */
+/*   load_routine.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 12:43:43 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/08 19:26:42 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <stdint.h>
+#include <string.h>
 #include <fcntl.h>
 
 int			map_into_memory(struct s_file_infos *f, char const *fname)
@@ -23,13 +24,14 @@ int			map_into_memory(struct s_file_infos *f, char const *fname)
 	int		fd;
 	struct stat	informations;
 
-	HANDLE_NEG_ERROR((fd = open(fname, O_RDONLY)));
-	HANDLE_GNU_ERROR(fstat(fd, &informations));
+	if ((fd = open(fname, O_RDONLY)) < 0)
+		return (-fprintf(stderr, "ft_nm: %s -> %s\n", fname, strerror(errno)));
+	HANDLE_GNU_ERROR(fstat(fd, &informations), strerror(errno));
 	f->length = (uintptr_t)informations.st_size;
 	if ((f->head = mmap(NULL, f->length, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED) {
-		HANDLE_GNU_ERROR(close(fd));
-		return (-EXIT_FAILURE);
+		HANDLE_GNU_ERROR(close(fd), strerror(errno));
+		return (-fprintf(stderr, "ft_nm: %s -> %s\n", fname, strerror(errno)));
 	}
-	HANDLE_GNU_ERROR(close(fd));
+	HANDLE_GNU_ERROR(close(fd), strerror(errno));
 	return (EXIT_SUCCESS);
 }
