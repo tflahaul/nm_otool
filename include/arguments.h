@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/23 12:43:43 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/08 23:28:35 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,24 @@
 # define OPTION_P	0x0000010
 # define OPTION_N	0x0000020
 
-enum		e_needargs {
+enum			e_needargs {
 	no_argument,
 	required_argument
 };
 
-struct		s_options {
-	char	*fullname;
-	size_t	flag;
-	int	has_arg;
-	int	shortname;
+struct			s_option {
+	char		*fullname;
+	size_t		flag;
+	int		has_arg;
+	int		shortname;
 };
 
-struct		s_arguments {
-	char	**arguments;
-	size_t	options;
-	size_t	size;
+struct			s_arguments {
+	char		**arguments;
+	size_t		options;
+	size_t		size;
 };
 
-void		parse_arguments(struct s_arguments *ar, int ac, char const **av);
+void			parse_arguments(struct s_arguments *, int, char const **);
 
 #endif /* __ARGUMENTS_H__ */

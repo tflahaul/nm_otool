@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:31 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/08 19:26:40 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/08 22:22:37 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int				main(int argc, char const **argv)
 
 	parse_arguments(&args, argc, argv);
 	for (unsigned int index = 0; index < args.size; ++index) {
-		if (map_into_memory(&file, args.arguments[index]) == EXIT_SUCCESS) {
+		if (load_file_informations(&file, args.arguments[index]) == EXIT_SUCCESS) {
 			architecture_dispatch(&file);
 			HANDLE_GNU_ERROR(munmap(file.head, file.length), strerror(errno));
 		}

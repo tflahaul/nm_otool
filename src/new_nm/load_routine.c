@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/08 19:26:42 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/08 22:46:41 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,28 @@
 #include <string.h>
 #include <fcntl.h>
 
-int			map_into_memory(struct s_file_infos *f, char const *fname)
+static void		*map_into_memory(int const fd, size_t const length)
 {
-	int		fd;
+	void const	*ptr = mmap(NULL, length, PROT_READ, MAP_PRIVATE, fd, 0);
+
+	if (__builtin_expect((ptr == MAP_FAILED), 0)) {
+		HANDLE_GNU_ERROR(close(fd), strerror(errno));
+		return (NULL);
+	}
+	return ((void *)ptr);
+}
+
+int			load_file_informations(struct s_file_infos *f, char const *fname)
+{
+	int const	fd = open(fname, O_RDONLY);
 	struct stat	informations;
 
-	if ((fd = open(fname, O_RDONLY)) < 0)
-		return (-fprintf(stderr, "ft_nm: %s -> %s\n", fname, strerror(errno)));
+	if (fd < 0)
+		return (-fprintf(stderr, "ft_nm: '%s' -> %s\n", fname, strerror(errno)));
 	HANDLE_GNU_ERROR(fstat(fd, &informations), strerror(errno));
 	f->length = (uintptr_t)informations.st_size;
-	if ((f->head = mmap(NULL, f->length, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED) {
-		HANDLE_GNU_ERROR(close(fd), strerror(errno));
-		return (-fprintf(stderr, "ft_nm: %s -> %s\n", fname, strerror(errno)));
-	}
+	if ((f->head = map_into_memory(fd, f->length)) == NULL)
+		return (-fprintf(stderr, "ft_nm: '%s' -> %s\n", fname, strerror(errno)));
 	HANDLE_GNU_ERROR(close(fd), strerror(errno));
 	return (EXIT_SUCCESS);
 }

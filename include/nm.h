@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/08 19:26:20 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/09 18:26:39 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@
 #  include <mach-o/swap.h>
 #  include <mach-o/fat.h>
 #  include <mach-o/nlist.h>
-//# else
-//#  error "Systems other than macOS are not supported"
+#  define __is_supported(x)	(x == MH_MAGIC_64 || x == MH_CIGAM_64 || x == MH_MAGIC || x == MH_CIGAM)
+#  define __is_64_bytes(x)	(x == MH_MAGIC_64 || x == MH_CIGAM_64)
+# else
+#  error "Systems other than macOS are not supported"
 # endif /* __APPLE__ */
 
 # include <stdint.h>
@@ -32,7 +34,7 @@ struct				s_symbol
 
 #pragma pack(push, 4)
 
-struct				s_mach_section
+struct				s_macho_file
 {
 	struct s_section	*sectlist;
 	struct s_symbol		*symarray;
@@ -50,7 +52,7 @@ struct				s_file_infos
 	uintptr_t		length;
 };
 
-int		map_into_memory(struct s_file_infos *, char const *);
+int		load_file_informations(struct s_file_infos *, char const *);
 int		architecture_dispatch(struct s_file_infos *);
 
 #endif /* __NM_H__ */

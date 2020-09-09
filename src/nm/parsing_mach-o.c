@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 15:31:26 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/29 11:59:47 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/08 23:31:29 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include "../include/libsimd.h"
 #include "../include/nm.h"
 #include "../include/nm_parsing_mach_o.h"
 #include "../include/errors.h"

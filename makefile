@@ -6,7 +6,7 @@
 #    By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 22:08:10 by abrunet           #+#    #+#              #
-#    Updated: 2020/09/08 19:26:48 by thflahau         ###   ########.fr        #
+#    Updated: 2020/09/09 18:01:52 by thflahau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,11 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@printf "%-45s" " > Compiling $* ..."
 	@$(CC) $(CFLAGS) -MMD $(INCFLAG) -c $< -o $@
 	@echo '✓'
+
+stripped: $(NAME)
+	@printf "$(YELLOW)%-45s$(STD)" "Stripping executable $(NAME) ..."
+	@strip $(NAME)
+	@echo "$(GREEN)DONE$(STD)"
 
 clean	:
 	@/bin/rm -rf $(OBJDIR)

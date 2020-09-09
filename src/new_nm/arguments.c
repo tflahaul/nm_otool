@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/08 19:26:37 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/09 17:49:44 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-static struct s_options		g_options[] = {
+static struct s_option	g_options[] = {
 	{"-undefined-only", OPTION_U,    no_argument, 'u'},
 	{"-defined-only",   OPTION_CAPU, no_argument, 'd'},
 	{"-numeric-sort",   OPTION_N,    no_argument, 'n'},
@@ -27,19 +27,19 @@ static struct s_options		g_options[] = {
 	{0, 0, 0, 0}
 };
 
-static void			usage(char const *filename)
+static void		usage(int const stream, char const *file)
 {
-	int			fd, bytes;
-	char			buffer[BUFSIZ];
+	int		fd, bytes;
+	char		buffer[BUFSIZ];
 
-	HANDLE_NEG_ERROR((fd = open(filename, O_RDONLY)), strerror(errno))
+	HANDLE_NEG_ERROR((fd = open(file, O_RDONLY)), strerror(errno))
 	while ((bytes = read(fd, &buffer, BUFSIZ)) > 0)
-		write(STDOUT_FILENO, &buffer, bytes);
+		write(stream, &buffer, bytes);
 	HANDLE_GNU_ERROR(close(fd), strerror(errno));
 	exit(EXIT_FAILURE);
 }
 
-static struct s_options		*search_option(char const *arg)
+static struct s_option	*search_option(char const *arg)
 {
 	for (unsigned int index = 0; g_options[index].shortname != 0; ++index)
 		if (strcmp(arg, g_options[index].fullname) == 0 || arg[0] == g_options[index].shortname)
@@ -49,21 +49,21 @@ static struct s_options		*search_option(char const *arg)
 
 /*
 **	'parse_arguments' follows the POSIX command-line arguments convention:
-**	 - Options precede other non-option arguments.
-**	This behavior means you can't intermix options and non-option arguments
+**	"Options precede other non-option arguments". This means you can't intermix
+**	options and non-option arguments
 */
-void				parse_arguments(struct s_arguments *args, int ac, char const **av)
+void			parse_arguments(struct s_arguments *args, int ac, char const **av)
 {
-	unsigned int		index = 0;
-	struct s_options	*option = NULL;
+	unsigned int	index = 0;
+	struct s_option	*option = NULL;
 
 	args->options = 0;
 	while (++index < (unsigned int)ac && av[index][0] == '-') {
 		if ((option = search_option(av[index] + 1)) == NULL) {
 			fprintf(stderr, "ft_nm: invalid option '%s'\n", av[index]);
-			usage("nm.usage");
+			usage(STDERR_FILENO, "nm.usage");
 		} else if (option->shortname == 'h') {
-			usage("nm.usage");
+			usage(STDOUT_FILENO, "nm.usage");
 		} else
 			args->options |= option->flag;
 	}
