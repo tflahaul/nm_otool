@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/09 18:26:39 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/09 22:25:50 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,14 @@
 
 # include <stdint.h>
 
-struct				s_symbol
+struct			s_symbol
 {
-	char			*name;
-	struct nlist_64		*entry;
+	char		*name;
+	struct nlist_64	*entry;
 };
 
 #pragma pack(push, 4)
-
-struct				s_macho_file
+struct			s_macho_file
 {
 	struct s_section	*sectlist;
 	struct s_symbol		*symarray;
@@ -43,16 +42,15 @@ struct				s_macho_file
 	void			*strtab;
 	void			*offset;
 };
-
 #pragma pack(pop)
 
-struct				s_file_infos
+struct			s_file_infos
 {
-	void			*head;
-	uintptr_t		length;
+	void		*head;
+	uintptr_t	length;
 };
 
 int		load_file_informations(struct s_file_infos *, char const *);
-int		architecture_dispatch(struct s_file_infos *);
+void		architecture_dispatch(struct s_file_infos *);
 
 #endif /* __NM_H__ */
