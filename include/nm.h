@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/10 15:42:09 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/10 20:30:04 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #  include <mach-o/swap.h>
 #  include <mach-o/fat.h>
 #  include <mach-o/nlist.h>
+#  include <mach-o/machine.h>
 #  define __is_supported(x)	(x == MH_MAGIC_64 || x == MH_CIGAM_64 || x == MH_MAGIC || x == MH_CIGAM)
 #  define __is_64_bytes(x)	(x == MH_MAGIC_64 || x == MH_CIGAM_64)
 # else
@@ -25,6 +26,7 @@
 # endif /* __APPLE__ */
 
 # include <stdint.h>
+# include <unistd.h>
 
 struct			s_symbol
 {
@@ -51,6 +53,6 @@ struct			s_file_infos
 };
 
 int		load_file_informations(struct s_file_infos *, char const *);
-int		list_symbols_from_file(struct s_file_infos *);
+int		list_symbols_from_file(struct s_file_infos *, size_t);
 
 #endif /* __NM_H__ */
