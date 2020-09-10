@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/09 22:25:50 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/10 15:42:09 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,6 @@ struct			s_file_infos
 };
 
 int		load_file_informations(struct s_file_infos *, char const *);
-void		architecture_dispatch(struct s_file_infos *);
+int		list_symbols_from_file(struct s_file_infos *);
 
 #endif /* __NM_H__ */
