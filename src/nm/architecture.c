@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/10 20:18:24 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/13 18:57:24 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static ssize_t			get_supported_macho_section(struct s_file_infos *f)
 				memcpy(&architecture, &(ptr[index]), sizeof(struct fat_arch))
 				if (header.magic == FAT_CIGAM)
 					swap_fat_arch(&architecture, header.nfat_arch, NXHostByteOrder());
-				if (architecture.cputype == 0 /* get system cpu type */)
+				if (architecture.cputype == 0 /* get machine cpu type */)
 					return ((ssize_t)ptr.offset);
 			}
 		}
@@ -54,7 +54,7 @@ int				list_symbols_from_file(struct s_file_infos *f, size_t opt)
 
 	memset(&macho, 0, sizeof(struct s_macho_file));
 	macho.offset = f->head;
-	if (magic == FAT_MAGIC || magic == FAT_CIGAM)
+	if (__is_universal(magic) == EXIT_TRUE)
 		if ((off = get_supported_macho_section(f)) > 0)
 			macho.offset = (void *)((uintptr_t)f->head + off);
 	macho.magic = safe_read_u32(f, (uintptr_t)macho.offset);
@@ -64,6 +64,6 @@ int				list_symbols_from_file(struct s_file_infos *f, size_t opt)
 		// sort symbols
 		// display symbols
 		// free symbols
-	}
+	} else { fprintf(stdout, "ft_nm: No symbols\n"); }
 	return (EXIT_SUCCESS);
 }
