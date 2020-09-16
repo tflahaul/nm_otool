@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/16 18:40:35 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/16 20:26:35 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include "../../include/memory.h"
 #include "../../include/parsing.h"
 #include "../../include/nm.h"
+#include <mach-o/loader.h>
+#include <mach-o/swap.h>
+#include <mach-o/fat.h>
 #include <stdint.h>
 #include <unistd.h>
 #include <string.h>
