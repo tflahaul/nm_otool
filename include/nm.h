@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/13 18:08:35 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/16 18:01:01 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #  include <mach-o/swap.h>
 #  include <mach-o/fat.h>
 #  include <mach-o/nlist.h>
-#  include <mach-o/machine.h>
 #  define __is_universal(x)	(x == FAT_MAGIC || x == FAT_CIGAM)
 #  define __is_supported(x)	(x == MH_MAGIC_64 || x == MH_CIGAM_64 || x == MH_MAGIC || x == MH_CIGAM)
 #  define __is_64_bytes(x)	(x == MH_MAGIC_64 || x == MH_CIGAM_64)
