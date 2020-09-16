@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/08 23:28:35 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/16 11:27:07 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 # include <unistd.h>
 
-# define OPTION_R	0x0000001
-# define OPTION_U	0x0000002
-# define OPTION_CAPU	0x0000004
-# define OPTION_J	0x0000008
-# define OPTION_P	0x0000010
-# define OPTION_N	0x0000020
+# define OPTION_R	0x00001ul
+# define OPTION_U	0x00002ul
+# define OPTION_D	0x00004ul
+# define OPTION_J	0x00008ul
+# define OPTION_P	0x00010ul
+# define OPTION_N	0x00020ul
 
 enum			e_needargs {
 	no_argument,

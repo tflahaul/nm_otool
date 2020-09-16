@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/13 18:57:24 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/16 11:25:30 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 static int			get_symbols(struct s_file_infos *f, struct s_macho_file *macho)
 {
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }
 
 static ssize_t			get_supported_macho_section(struct s_file_infos *f)
@@ -37,7 +37,7 @@ static ssize_t			get_supported_macho_section(struct s_file_infos *f)
 			if (__readable(f, &(ptr[index]), struct fat_arch) == EXIT_TRUE) {
 				memcpy(&architecture, &(ptr[index]), sizeof(struct fat_arch))
 				if (header.magic == FAT_CIGAM)
-					swap_fat_arch(&architecture, header.nfat_arch, NXHostByteOrder());
+					swap_fat_arch(&architecture, 1, NXHostByteOrder());
 				if (architecture.cputype == 0 /* get machine cpu type */)
 					return ((ssize_t)ptr.offset);
 			}
@@ -56,14 +56,14 @@ int				list_symbols_from_file(struct s_file_infos *f, size_t opt)
 	macho.offset = f->head;
 	if (__is_universal(magic) == EXIT_TRUE)
 		if ((off = get_supported_macho_section(f)) > 0)
-			macho.offset = (void *)((uintptr_t)f->head + off);
+			macho.offset = (void *)((uintptr_t)f->head + (uintptr_t)off);
 	macho.magic = safe_read_u32(f, (uintptr_t)macho.offset);
 	if (__is_supported(macho.magic) == EXIT_FALSE)
-		return (-fprintf(stderr, "ft_nm: Unsupported target\n"));
+		return (-fputs("ft_nm: unsupported target\n", stderr));
 	if (get_symbols(f, &macho) == EXIT_SUCCESS) {
 		// sort symbols
 		// display symbols
 		// free symbols
-	} else { fprintf(stdout, "ft_nm: No symbols\n"); }
+	} else { puts("ft_nm: no symbols"); }
 	return (EXIT_SUCCESS);
 }

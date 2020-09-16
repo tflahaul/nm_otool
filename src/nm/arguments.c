@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/09 17:49:44 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/14 17:00:49 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 #include <fcntl.h>
 
 static struct s_option	g_options[] = {
-	{"-undefined-only", OPTION_U,    no_argument, 'u'},
-	{"-defined-only",   OPTION_CAPU, no_argument, 'd'},
-	{"-numeric-sort",   OPTION_N,    no_argument, 'n'},
-	{"-reverse-sort",   OPTION_R,    no_argument, 'r'},
-	{"-names-only",     OPTION_J,    no_argument, 'j'},
-	{"-no-sort",        OPTION_P,    no_argument, 'p'},
-	{"-help",           0x000000,    no_argument, 'h'},
+	{"-undefined-only", OPTION_U, no_argument, 'u'},
+	{"-defined-only",   OPTION_D, no_argument, 'd'},
+	{"-numeric-sort",   OPTION_N, no_argument, 'n'},
+	{"-reverse-sort",   OPTION_R, no_argument, 'r'},
+	{"-names-only",     OPTION_J, no_argument, 'j'},
+	{"-no-sort",        OPTION_P, no_argument, 'p'},
+	{"-help",           0,        no_argument, 'h'},
 	{0, 0, 0, 0}
 };
 
