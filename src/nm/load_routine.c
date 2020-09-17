@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/10 14:55:35 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/17 15:05:47 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static inline void	*map_into_memory(int const fd, size_t const length)
 	return ((void *)ptr);
 }
 
-int			load_file_informations(struct s_file_infos *f, char const *fname)
+int			load_file_informations(struct file *f, char const *fname)
 {
 	int		fd;
 	struct stat	informations;

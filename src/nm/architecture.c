@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/16 20:26:35 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/17 16:03:36 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,12 @@
 #include <string.h>
 #include <stdio.h>
 
-static inline int		get_symbols(struct s_file_infos *f, struct s_macho_file *mach)
+static inline int		get_symbols(struct file *f, struct machobj *m)
 {
-	if (mach->magic == MH_MAGIC || mach->magic == MH_CIGAM)
-		return (get_symbols_i386(f, mach));
-	return (get_symbols_x86_64(f, mach));
+	return (__is_64_bytes(m->magic) ? get_symbols_x86_64(f, m) : get_symbols_i386(f, m));
 }
 
-static ssize_t			get_supported_macho_section(struct s_file_infos *f)
+static ssize_t			get_supported_macho_section(struct file *f)
 {
 	struct fat_header	header;
 	struct fat_arch		architecture;
@@ -48,19 +46,19 @@ static ssize_t			get_supported_macho_section(struct s_file_infos *f)
 					swap_fat_arch(&architecture, 1, NXHostByteOrder());
 				if (architecture.cputype == CPU_TYPE_X86_64 || architecture.cputype == CPU_TYPE_I386)
 					return ((ssize_t)architecture.offset);
-			}
+			} else { return (-EXIT_FAILURE); }
 		}
 	}
 	return (-EXIT_FAILURE);
 }
 
-int				list_symbols_from_file(struct s_file_infos *f, __attribute__((unused)) size_t opt)
+int				list_symbols_from_file(struct file *f, __attribute__((unused)) size_t opt)
 {
 	ssize_t			off = 0;
 	uint32_t const		magic = safe_read_u32(f, (uintptr_t)f->head);
-	struct s_macho_file	macho;
+	struct machobj		macho;
 
-	memset(&macho, 0, sizeof(struct s_macho_file));
+	memset(&macho, 0, sizeof(struct machobj));
 	macho.offset = f->head;
 	if (__is_universal(magic) == TRUE)
 		if ((off = get_supported_macho_section(f)) > 0)

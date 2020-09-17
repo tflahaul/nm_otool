@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nm_parsing_mach_o.h                                :+:      :+:    :+:   */
+/*   bytes.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/08 09:33:23 by thflahau          #+#    #+#             */
-/*   Updated: 2020/01/27 12:38:14 by thflahau         ###   ########.fr       */
+/*   Created: 2020/09/08 19:27:26 by thflahau          #+#    #+#             */
+/*   Updated: 2020/09/17 16:27:19 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __NM_PARSING_MACH_O_H__
-# define __NM_PARSING_MACH_O_H__
+#ifndef __BYTES_H__
+# define __BYTES_H__
 
 # include "nm.h"
+# include <stdint.h>
 
-int			ft_parse_architecture(struct s_file *);
-int			ft_load_file_content(struct s_file *, char const *);
-void			ft_display_symbols(struct s_mach_section *, struct s_file *);
-void			ft_parse_segment(struct s_mach_section *, void *);
-void			ft_parse_mach_section(struct s_file *, uintptr_t);
+# define __end_addr(f)		((uintptr_t)f->head + f->length)
+# define __readable(f, p, type)	((uintptr_t)p >= (uintptr_t)f->head && (uintptr_t)p <= __end_addr(f) - sizeof(type))
 
-#endif /* __NM_PARSING_MACH_O_H__ */
+uint32_t		safe_read_u32(struct file *, uintptr_t);
+uint64_t		safe_read_u64(struct file *, uintptr_t);
+uint32_t		swap_uint32(uint32_t);
+
+#endif /* __BYTES_H__ */

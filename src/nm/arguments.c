@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/14 17:00:49 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/17 15:04:21 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-static struct s_option	g_options[] = {
+static struct option	g_options[] = {
 	{"-undefined-only", OPTION_U, no_argument, 'u'},
 	{"-defined-only",   OPTION_D, no_argument, 'd'},
 	{"-numeric-sort",   OPTION_N, no_argument, 'n'},
@@ -52,10 +52,10 @@ static struct s_option	*search_option(char const *arg)
 **	"Options precede other non-option arguments". This means you can't intermix
 **	options and non-option arguments
 */
-void			parse_arguments(struct s_arguments *args, int ac, char const **av)
+void			parse_arguments(struct arguments *args, int ac, char const **av)
 {
 	unsigned int	index = 0;
-	struct s_option	*option = NULL;
+	struct option	*option = NULL;
 
 	args->options = 0;
 	while (++index < (unsigned int)ac && av[index][0] == '-') {

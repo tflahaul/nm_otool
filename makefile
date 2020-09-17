@@ -69,4 +69,4 @@ fclean	: clean
 
 re	: fclean all
 
-.PHONY	: all $(LIBFT) clean fclean re
+.PHONY	: all stripped clean fclean re

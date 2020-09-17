@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/16 11:27:07 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/17 15:03:41 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,19 @@ enum			e_needargs {
 	required_argument
 };
 
-struct			s_option {
+struct			option {
 	char		*fullname;
 	size_t		flag;
 	int		has_arg;
 	int		shortname;
 };
 
-struct			s_arguments {
+struct			arguments {
 	char		**arguments;
 	size_t		options;
 	size_t		size;
 };
 
-void			parse_arguments(struct s_arguments *, int, char const **);
+void			parse_arguments(struct arguments *, int, char const **);
 
 #endif /* __ARGUMENTS_H__ */

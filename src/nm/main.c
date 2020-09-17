@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:31 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/10 20:17:57 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/17 15:06:07 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 int				main(int argc, char const **argv)
 {
-	struct s_arguments	args;
-	struct s_file_infos	file;
+	struct arguments	args;
+	struct file		file;
 
 	parse_arguments(&args, argc, argv);
 	for (unsigned int index = 0; index < args.size; ++index) {
