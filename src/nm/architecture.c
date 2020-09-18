@@ -6,13 +6,14 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/17 16:03:36 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/18 16:19:41 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/errors.h"
 #include "../../include/memory.h"
 #include "../../include/parsing.h"
+#include "../../include/sections.h"
 #include "../../include/nm.h"
 #include <mach-o/loader.h>
 #include <mach-o/swap.h>
@@ -39,7 +40,7 @@ static ssize_t			get_supported_macho_section(struct file *f)
 			swap_fat_header(&header, NXHostByteOrder());
 			header.magic = swap_uint32(header.magic);
 		}
-		for (unsigned int index = 0; index < header.nfat_arch; ++index) {
+		for (register uint32_t index = 0; index < header.nfat_arch; ++index) {
 			if (__readable(f, &(ptr[index]), struct fat_arch) == TRUE) {
 				memcpy(&architecture, &(ptr[index]), sizeof(struct fat_arch));
 				if (header.magic == FAT_CIGAM)
@@ -69,7 +70,7 @@ int				list_symbols_from_file(struct file *f, __attribute__((unused)) size_t opt
 	if (get_symbols(f, &macho) == EXIT_SUCCESS) {
 		// sort symbols
 		// display symbols
-		// free symbols
+		free_sections_list(macho.sections_list);
 	} else { puts("ft_nm: no symbols"); }
 	return (EXIT_SUCCESS);
 }

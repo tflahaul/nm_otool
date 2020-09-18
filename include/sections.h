@@ -6,14 +6,13 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 14:10:41 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/17 16:24:54 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/18 15:44:26 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __SECTIONS_H__
 # define __SECTIONS_H__
 
-# include "sections.h"
 # include <mach-o/loader.h>
 # include <stdint.h>
 
