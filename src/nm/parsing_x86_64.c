@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/18 16:19:56 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/19 21:00:07 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,13 @@ static int			parse_segment(struct file *f, struct machobj *m, void const *ptr)
 	if (m->magic == MH_CIGAM_64)
 		swap_segment_command_64(&segment, NXHostByteOrder());
 	secptr = (struct section_64 *)((uintptr_t)ptr + sizeof(struct segment_command_64));
-	for (register uint32_t index = 0; index < segment.nsects; ++index) {
-		if (__readable(f, &(secptr[index]), struct section_64) == TRUE) {
-			memcpy(&section, &(secptr[index]), sizeof(struct section_64));
+	for (register uint32_t idx = 0; idx < segment.nsects; ++idx) {
+		if (__readable(f, &(secptr[idx]), struct section_64) == TRUE) {
+			memcpy(&section, &(secptr[idx]), sizeof(struct section_64));
 			if (m->magic == MH_CIGAM_64)
 				swap_section_64(&section, 1, NXHostByteOrder());
-			push_section(&(m->sections_list), &section, index + 1);
+			if (push_section(&(m->sections_list), &section, idx + 1) != EXIT_SUCCESS)
+				return (-EXIT_FAILURE);
 		} else { return (-EXIT_FAILURE); }
 	}
 	return (EXIT_SUCCESS);

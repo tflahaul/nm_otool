@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/17 15:35:22 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/17 16:26:23 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/19 21:15:02 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "../../include/sections.h"
 #include <mach-o/loader.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
-// ATTENTION *head == NULL
 int			push_section(struct msection **head, struct section_64 *sect, uint32_t idx)
 {
 	struct msection	*node;

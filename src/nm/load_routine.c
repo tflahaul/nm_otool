@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/17 15:05:47 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/19 21:05:23 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 #include <string.h>
 #include <fcntl.h>
 
-static inline void	*map_into_memory(int const fd, size_t const length)
+static inline void	*map_file_into_memory(int const fd, size_t const len)
 {
-	void const	*ptr = mmap(NULL, length, PROT_READ, MAP_PRIVATE, fd, 0);
+	void const	*ptr = mmap(NULL, len, PROT_READ, MAP_PRIVATE, fd, 0);
 
 	if (__builtin_expect((ptr == MAP_FAILED), 0)) {
 		HANDLE_GNU_ERROR(close(fd), strerror(errno));
@@ -39,7 +39,7 @@ int			load_file_informations(struct file *f, char const *fname)
 		return (-fprintf(stderr, "ft_nm: '%s' -> %s\n", fname, strerror(errno)));
 	HANDLE_GNU_ERROR(fstat(fd, &informations), strerror(errno));
 	f->length = (uintptr_t)informations.st_size;
-	if ((f->head = map_into_memory(fd, f->length)) == NULL)
+	if ((f->head = map_file_into_memory(fd, f->length)) == NULL)
 		return (-fprintf(stderr, "ft_nm: '%s' -> %s\n", fname, strerror(errno)));
 	HANDLE_GNU_ERROR(close(fd), strerror(errno));
 	return (EXIT_SUCCESS);
