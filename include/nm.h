@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/17 15:48:59 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 09:02:40 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ struct			symbol
 	struct nlist_64	*entry;
 };
 
+#pragma pack(push, 4)
 struct			machobj
 {
 	struct msection	*sections_list;
@@ -43,6 +44,7 @@ struct			machobj
 	void		*strtab;
 	void		*offset;
 };
+#pragma pack(pop)
 
 struct			file
 {

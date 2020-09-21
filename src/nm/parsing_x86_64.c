@@ -6,13 +6,13 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/19 21:00:07 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 09:07:16 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/nm.h"
 #include "../../include/errors.h"
-#include "../../include/memory.h"
+#include "../../include/bytes.h"
 #include "../../include/parsing.h"
 #include "../../include/sections.h"
 #include <mach-o/loader.h>
@@ -22,16 +22,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int			parse_symtab(struct file *f, struct machobj *m, void const *ptr)
+static int			parse_symtab(__attribute__((unused)) struct file *f, struct machobj *m, void const *ptr)
 {
 	struct symtab_command	symtab;
-	void			*ptr;
+	void			*offset;
 
 	memcpy(&symtab, ptr, sizeof(struct symtab_command));
 	if (m->magic == MH_CIGAM_64)
 		swap_symtab_command(&symtab, NXHostByteOrder());
-	mach->strtab = (void *)((uintptr_t)mach->offset + symtab.stroff);
-	ptr = (void *)((uintptr_t)m->offset + symtab.symoff);
+	m->strtab = (void *)((uintptr_t)m->offset + symtab.stroff);
+	offset = (void *)((uintptr_t)m->offset + symtab.symoff);
 	for (register uint32_t index = 0; index < symtab.nsyms; ++index) {}
 	return (EXIT_SUCCESS);
 }

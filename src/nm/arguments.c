@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/17 15:04:21 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 09:03:59 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void		usage(int const stream, char const *file)
 	exit(EXIT_FAILURE);
 }
 
-static struct s_option	*search_option(char const *arg)
+static struct option	*search_option(char const *arg)
 {
 	for (unsigned int index = 0; g_options[index].shortname != 0; ++index)
 		if (strcmp(arg, g_options[index].fullname) == 0 || arg[0] == g_options[index].shortname)

@@ -6,13 +6,13 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/19 21:12:43 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 09:05:54 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/nm.h"
 #include "../../include/errors.h"
-#include "../../include/memory.h"
+#include "../../include/bytes.h"
 #include "../../include/parsing.h"
 #include "../../include/sections.h"
 #include <mach-o/loader.h>
@@ -23,9 +23,10 @@
 
 static int			parse_symtab(struct file *f, struct machobj *m, void const *ptr)
 {
-	(void *)f;
-	(void *)m;
-	(void *)ptr;
+	(void)f;
+	(void)m;
+	(void)ptr;
+	return (EXIT_SUCCESS);
 }
 
 static int			parse_segment(struct file *f, struct machobj *m, void const *ptr)
@@ -43,8 +44,8 @@ static int			parse_segment(struct file *f, struct machobj *m, void const *ptr)
 			memcpy(&section, &(secptr[idx]), sizeof(struct section));
 			if (m->magic == MH_CIGAM)
 				swap_section(&section, 1, NXHostByteOrder());
-			if (push_section(&(m->sections_list), &section, idx + 1) != EXIT_SUCCESS)
-				return (-EXIT_FAILURE);
+//			if (push_section(&(m->sections_list), &section, idx + 1) != EXIT_SUCCESS)
+//				return (-EXIT_FAILURE);
 		} else { return (-EXIT_FAILURE); }
 	}
 	return (EXIT_SUCCESS);

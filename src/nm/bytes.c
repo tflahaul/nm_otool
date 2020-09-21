@@ -6,11 +6,11 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 19:27:53 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/17 16:27:01 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 09:01:53 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/memory.h"
+#include "../../include/bytes.h"
 #include "../../include/nm.h"
 #include <stdint.h>
 
