@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/17 15:35:22 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/19 21:15:02 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/20 12:40:07 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int			push_section(struct msection **head, struct section_64 *sect, uint32_t idx
 
 	if ((node = (struct msection *)malloc(sizeof(struct msection))) == NULL)
 		return (-EXIT_FAILURE);
-	node->id = idx;
 	memcpy(node->sectname, sect->sectname, sizeof(node->sectname));
 	node->next = (*head == NULL) ? NULL : *head;
+	node->id = idx;
 	*head = node;
 	return (EXIT_SUCCESS);
 }

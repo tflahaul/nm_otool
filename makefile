@@ -6,7 +6,7 @@
 #    By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 22:08:10 by abrunet           #+#    #+#              #
-#    Updated: 2020/09/16 18:02:09 by thflahau         ###   ########.fr        #
+#    Updated: 2020/09/20 13:58:46 by thflahau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ OBJDIR		=	obj
 DIRS := $(patsubst $(SRCDIR)%, $(OBJDIR)%, $(shell find $(SRCDIR) -type d))
 
 ##########   FLAGS   ##########
-CFLAGS		=	-Wall					\
+CCFLAGS		=	-Wall					\
 			-Wextra					\
 			-Werror					\
 			-Wpadded				\
@@ -45,7 +45,7 @@ all	: $(NAME)
 
 $(NAME)	: $(OBJS)
 	@printf "$(YELLOW)%-45s$(STD)" "Building executable $@ ..."
-	@$(CC) $(CFLAGS) $(INCFLAG) $(OBJS) -o $@
+	@$(CC) $(CCFLAGS) $(INCFLAG) $(OBJS) -o $@
 	@echo "$(GREEN)DONE$(STD)"
 
 -include $(DEPENDS)
@@ -53,7 +53,7 @@ $(NAME)	: $(OBJS)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(DIRS)
 	@printf "%-45s" " > Compiling $* ..."
-	@$(CC) $(CFLAGS) -MMD $(INCFLAG) -c $< -o $@
+	@$(CC) $(CCFLAGS) -MMD $(INCFLAG) -c $< -o $@
 	@echo '✓'
 
 stripped: $(NAME)
@@ -62,10 +62,18 @@ stripped: $(NAME)
 	@echo "$(GREEN)DONE$(STD)"
 
 clean	:
-	@/bin/rm -rf $(OBJDIR)
+	@if [ -d $(OBJDIR) ]; then \
+		printf "$(YELLOW)%-45s$(STD)" "Removing objects ...";\
+		/bin/rm -rf $(OBJDIR);\
+		echo "$(GREEN)DONE$(STD)";\
+	fi;
 
 fclean	: clean
-	@/bin/rm -rf $(NAME)
+	@if [ -f $(NAME) ]; then \
+		printf "$(YELLOW)%-45s$(STD)" "Removing $(NAME) ...";\
+		/bin/rm -f $(NAME);\
+		echo "$(GREEN)DONE$(STD)";\
+	fi;
 
 re	: fclean all
 
