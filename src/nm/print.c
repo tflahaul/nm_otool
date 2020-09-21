@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 11:25:24 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 11:48:44 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 12:15:29 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,22 @@
 #include "../../include/arguments.h"
 #include "../../include/bytes.h"
 #include <mach-o/loader.h>
+#include <mach-o/nlist.h>
 #include <unistd.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
 
-static inline void		print_nspaces(int x)
+static inline void	print_nspaces(int x)
 {
-	char			buffer[256];
+	char		buffer[256];
 
-	memset(buffer, 0, sizeof(buffer));
-	memset(buffer, ' ', sizeof(buffer) - 1);
-	write(STDOUT_FILENO, buffer, x);
+	memset(buffer, ' ', sizeof(buffer));
+	buffer[256 - 1] = 0;
+	write(STDOUT_FILENO, buffer, (size_t)x);
 }
 
-static inline struct msection	*find_section(struct msection *head, uint32_t id)
+static struct msection	*find_section(struct msection *head, uint32_t id)
 {
 	while (head != NULL) {
 		if (head->id == id)

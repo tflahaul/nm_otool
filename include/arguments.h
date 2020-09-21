@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/17 15:03:41 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 12:13:28 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include <unistd.h>
 
 # define OPTION_R	0x00001ul
-# define OPTION_U	0x00002ul
 # define OPTION_D	0x00004ul
 # define OPTION_J	0x00008ul
+# define OPTION_U	(0x0002ul | OPTION_J)
 # define OPTION_P	0x00010ul
 # define OPTION_N	0x00020ul
 
