@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 09:23:56 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 11:54:42 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <string.h>
-#include <stdio.h>
 
 static inline int		get_symbols(struct file *f, struct machobj *m)
 {
@@ -53,7 +52,7 @@ static ssize_t			get_supported_macho_section(struct file *f)
 	return (-EXIT_FAILURE);
 }
 
-int				list_symbols_from_file(struct file *f, __attribute__((unused)) size_t opt)
+int				list_symbols_from_file(struct file *f, size_t opt)
 {
 	ssize_t			off = 0;
 	uint32_t const		magic = safe_read_u32(f, (uintptr_t)f->head);
@@ -68,9 +67,10 @@ int				list_symbols_from_file(struct file *f, __attribute__((unused)) size_t opt
 	if (__is_supported(macho.magic) == FALSE)
 		return (-fputs("ft_nm: unsupported target\n", stderr));
 	if (get_symbols(f, &macho) == EXIT_SUCCESS) {
-		// sort symbols
-		// display symbols
+		sort_symbols(macho.symbols_list, opt);
+		print_symbols(f, &macho, opt);
 		free_sections_list(macho.sections_list);
+		free_symbols_list(macho.symbols_list);
 	} else { puts("ft_nm: no symbols"); }
 	return (EXIT_SUCCESS);
 }

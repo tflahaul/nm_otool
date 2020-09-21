@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 09:07:16 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 11:46:15 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,45 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int			parse_symtab(__attribute__((unused)) struct file *f, struct machobj *m, void const *ptr)
+static int			push_symbol(struct symbol **head, struct nlist_64 *sym)
+{
+	struct symbol		*node;
+
+	if (sym->n_type & N_STAB)
+		return (EXIT_SUCCESS);
+	if ((node = (struct symbol *)malloc(sizeof(struct symbol))) == NULL)
+		return (-EXIT_FAILURE);
+	node->value = sym->n_value;
+	node->stridx = sym->n_un.n_strx;
+	node->type = (uint32_t)sym->n_type;
+	node->sectid = (uint32_t)sym->n_sect;
+	node->next = (*head == NULL) ? NULL : *head;
+	*head = node;
+	return (EXIT_SUCCESS);
+}
+
+static int			parse_symtab(struct file *f, struct machobj *m, void const *ptr)
 {
 	struct symtab_command	symtab;
-	void			*offset;
+	struct nlist_64		symbol;
+	struct nlist_64		*offset;
 
 	memcpy(&symtab, ptr, sizeof(struct symtab_command));
 	if (m->magic == MH_CIGAM_64)
 		swap_symtab_command(&symtab, NXHostByteOrder());
+	if (symtab.cmdsize != sizeof(struct symtab_command))
+		return (-EXIT_FAILURE);
 	m->strtab = (void *)((uintptr_t)m->offset + symtab.stroff);
 	offset = (void *)((uintptr_t)m->offset + symtab.symoff);
-	for (register uint32_t index = 0; index < symtab.nsyms; ++index) {}
+	for (register uint32_t index = 0; index < symtab.nsyms; ++index) {
+		if (__readable(f, &(offset[index]), struct nlist_64) == TRUE) {
+			memcpy(&symbol, &(offset[index]), sizeof(struct nlist_64));
+			if (m->magic == MH_CIGAM_64)
+				swap_nlist_64(&symbol, 1, NXHostByteOrder());
+			if (push_symbol(&(m->symbols_list), &symbol) != EXIT_SUCCESS)
+				return (-EXIT_FAILURE);
+		} else { return (-EXIT_FAILURE); }
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -51,7 +79,7 @@ static int			parse_segment(struct file *f, struct machobj *m, void const *ptr)
 			memcpy(&section, &(secptr[idx]), sizeof(struct section_64));
 			if (m->magic == MH_CIGAM_64)
 				swap_section_64(&section, 1, NXHostByteOrder());
-			if (push_section(&(m->sections_list), &section, idx + 1) != EXIT_SUCCESS)
+			if (push_section(&(m->sections_list), &section) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
 		} else { return (-EXIT_FAILURE); }
 	}

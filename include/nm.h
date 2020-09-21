@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 09:02:40 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/21 11:55:10 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,27 @@
 # include <stdint.h>
 # include <unistd.h>
 
+# pragma pack(push, 4)
+
 struct			symbol
 {
-	char		*name;
-	struct nlist_64	*entry;
+	uint64_t	value;
+	uint32_t	stridx;
+	uint32_t	type;
+	uint32_t	sectid;
+	struct symbol	*next;
 };
 
-#pragma pack(push, 4)
 struct			machobj
 {
 	struct msection	*sections_list;
-	struct symbol	*symbols_array;
-	uint64_t	arrsize;
-	uint32_t	magic;
+	struct symbol	*symbols_list;
 	void		*strtab;
 	void		*offset;
+	uint32_t	magic;
 };
-#pragma pack(pop)
+
+# pragma pack(pop)
 
 struct			file
 {
@@ -54,5 +58,7 @@ struct			file
 
 int		load_file_informations(struct file *, char const *);
 int		list_symbols_from_file(struct file *, size_t);
+void		sort_symbols(struct symbol *, size_t);
+void		print_symbols(struct file *, struct machobj *, size_t);
 
 #endif /* __NM_H__ */
