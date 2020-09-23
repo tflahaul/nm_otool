@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 11:25:24 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 12:15:29 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/23 20:58:13 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,19 @@ void			print_symbols(struct file *f, struct machobj *m, size_t opt)
 	char		*name;
 
 	while (ptr != NULL) {
+		if (!(opt & OPTION_J)) {
+			if (ptr->value != 0 || (ptr->value == 0 && (ptr->type & N_TYPE) != N_UNDF))
+				printf(__is_64_bytes(m->magic) ? "%016llx " : "%08llx ", ptr->value);
+			else
+				__is_64_bytes(m->magic) ? print_nspaces(17) : print_nspaces(9);
+			printf("%c ", get_type_character(ptr, m));
+		}
 		name = (char *)((uintptr_t)m->strtab + ptr->stridx);
-		if (__readable(f, name, 4) == TRUE) {
-			if (!(opt & OPTION_J)) {
-				if (ptr->value != 0 || (ptr->value == 0 && (ptr->type & N_TYPE) != N_UNDF))
-					printf(__is_64_bytes(m->magic) ? "%016llx " : "%08llx ", ptr->value);
-				else
-					__is_64_bytes(m->magic) ? print_nspaces(17) : print_nspaces(9);
-				printf("%c ", get_type_character(ptr, m));
-			}
+		if (__readable(f, name, int16_t) == TRUE) {
 			puts(name);
-		} else { printf("Symbol links to invalid address '%p'\n", (void *)name); }
+		} else {
+			printf("bad string index '%#016lx'\n", ADDRESS_START + ptr->stridx);
+		}
 		ptr = ptr->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/23 19:08:37 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/23 20:57:47 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 
 # include <stdint.h>
 # include <unistd.h>
+
+# define ADDRESS_START	(0x100000000)
 
 # pragma pack(push, 4)
 

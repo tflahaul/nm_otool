@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:04:28 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/23 19:02:04 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/23 20:57:21 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <mach-o/loader.h>
 #include <stdint.h>
 #include <stdio.h>
-
-#define ADDRESS_START		(0x100000000)
 
 void				print_text_section(struct file *f, struct section_64 *section)
 {
