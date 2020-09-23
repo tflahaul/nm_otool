@@ -6,7 +6,7 @@
 #    By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 22:08:10 by abrunet           #+#    #+#              #
-#    Updated: 2020/09/20 13:58:46 by thflahau         ###   ########.fr        #
+#    Updated: 2020/09/23 20:22:26 by thflahau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ HDR		=	include
 SRCDIR		=	src/nm
 OBJDIR		=	obj
 
-DIRS := $(patsubst $(SRCDIR)%, $(OBJDIR)%, $(shell find $(SRCDIR) -type d))
+DIRS		=	$(patsubst $(SRCDIR)%, $(OBJDIR)%, $(shell find $(SRCDIR) -type d))
 
 ##########   FLAGS   ##########
 CCFLAGS		=	-Wall					\
@@ -29,7 +29,7 @@ CCFLAGS		=	-Wall					\
 INCFLAG		=	-I $(HDR)
 
 #########   SOURCES   #########
-SRCS		=	$(shell find $(SRCDIR) -type f -name "*.c")
+SRCS		=	$(shell find $(SRCDIR) -type f -o -type l -name "*.c")
 
 OBJS		=	$(patsubst $(SRCDIR)%.c, $(OBJDIR)%.o, $(SRCS))
 

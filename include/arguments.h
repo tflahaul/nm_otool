@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 12:13:28 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/23 19:57:58 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define OPTION_U	(0x0002ul | OPTION_J)
 # define OPTION_P	0x00010ul
 # define OPTION_N	0x00020ul
+# define OPTION_S	0x00040ul
 
 enum			e_needargs {
 	no_argument,

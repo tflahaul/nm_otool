@@ -6,7 +6,7 @@
 #    By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 22:08:10 by abrunet           #+#    #+#              #
-#    Updated: 2020/09/23 18:20:35 by thflahau         ###   ########.fr        #
+#    Updated: 2020/09/23 20:23:30 by thflahau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ CCFLAGS		=	-Wall					\
 INCFLAG		=	-I $(HDR)
 
 #########   SOURCES   #########
-SRCS		=	$(shell find $(SRCDIR) -type f -name "*.c")
+SRCS		=	$(shell find $(SRCDIR) -type f -o -type l -name "*.c")
 
 OBJS		=	$(patsubst $(SRCDIR)%.c, $(OBJDIR)%.o, $(SRCS))
 
