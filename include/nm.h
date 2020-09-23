@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 12:06:11 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/23 19:08:37 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ struct			file
 
 int		load_file_informations(struct file *, char const *);
 int		list_symbols_from_file(struct file *, size_t);
-void		sort_symbols(struct symbol *, size_t);
+void		sort_symbols(struct file *, struct machobj *, size_t);
 void		print_symbols(struct file *, struct machobj *, size_t);
 
 #endif /* __NM_H__ */

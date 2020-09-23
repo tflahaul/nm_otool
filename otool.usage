@@ -1,4 +1,5 @@
 Usage: ./ft_otool [option(s)] [file(s)]
 Display the content of the (__TEXT,__text) section.
 Available options are:
+    -s, --strings         Prints the (__TEXT, __cstring) section
     -h, --help            Display this information

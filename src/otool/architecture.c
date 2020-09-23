@@ -5,15 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/23 19:35:36 by thflahau         ###   ########.fr       */
+/*   Created: 2020/09/23 17:33:18 by thflahau          #+#    #+#             */
+/*   Updated: 2020/09/23 18:11:24 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/errors.h"
 #include "../../include/bytes.h"
-#include "../../include/parsing.h"
-#include "../../include/sections.h"
+#include "../../include/otool.h"
 #include "../../include/nm.h"
 #include <mach-o/loader.h>
 #include <mach-o/swap.h>
@@ -22,9 +21,9 @@
 #include <unistd.h>
 #include <string.h>
 
-static inline int		get_symbols(struct file *f, struct machobj *m)
+static inline int		get_section(struct file *f, struct machobj *m)
 {
-	return (__is_64_bytes(m->magic) ? get_symbols_x86_64(f, m) : get_symbols_i386(f, m));
+	return (__is_64_bytes(m->magic) ? get_section_x86_64(f, m) : get_section_i386(f, m));
 }
 
 static ssize_t			get_supported_macho_section(struct file *f)
@@ -52,7 +51,7 @@ static ssize_t			get_supported_macho_section(struct file *f)
 	return (-EXIT_FAILURE);
 }
 
-int				list_symbols_from_file(struct file *f, size_t opt)
+int				print_section(struct file *f, __attribute__((unused)) size_t opt)
 {
 	ssize_t			off = 0;
 	uint32_t const		magic = safe_read_u32(f, (uintptr_t)f->head);
@@ -65,12 +64,9 @@ int				list_symbols_from_file(struct file *f, size_t opt)
 			macho.offset = (void *)((uintptr_t)f->head + (uintptr_t)off);
 	macho.magic = safe_read_u32(f, (uintptr_t)macho.offset);
 	if (__is_supported(macho.magic) == FALSE)
-		return (-fputs("ft_nm: unsupported target\n", stderr));
-	if (get_symbols(f, &macho) == EXIT_SUCCESS) {
-//		sort_symbols(f, &macho, opt);
-		print_symbols(f, &macho, opt);
-		free_sections_list(macho.sections_list);
-		free_symbols_list(macho.symbols_list);
-	} else { puts("ft_nm: no symbols"); }
+		return (-fputs("ft_otool: unsupported target\n", stderr));
+	if (get_section(f, &macho) == EXIT_SUCCESS) {
+		// print section
+	} else { puts("ft_otool: could not find section"); }
 	return (EXIT_SUCCESS);
 }
