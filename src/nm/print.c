@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 11:25:24 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 10:58:16 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/24 16:35:06 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,25 +76,25 @@ static int		get_type_character(struct symbol *sym, struct machobj *m)
 	return (type);
 }
 
+static void		print_node(struct machobj *m, struct symbol *sym, size_t opt)
+{
+	if (!(opt & OPTION_J)) {
+		if (sym->value != 0 || (sym->value == 0 && (sym->type & N_TYPE) != N_UNDF))
+			printf(__is_64_bytes(m->magic) ? "%016llx " : "%08llx ", sym->value);
+		else
+			__is_64_bytes(m->magic) ? print_nspaces(17) : print_nspaces(9);
+		printf("%c ", get_type_character(sym, m));
+	}
+	puts(sym->name);
+}
+
 void			print_symbols(struct file *f, struct machobj *m, size_t opt)
 {
-	struct symbol	*ptr = m->symbols_list;
-	char		*name;
+	struct symbol	*root = m->symbols_root;
 
-	while (ptr != NULL) {
-		if (!(opt & OPTION_J)) {
-			if (ptr->value != 0 || (ptr->value == 0 && (ptr->type & N_TYPE) != N_UNDF))
-				printf(__is_64_bytes(m->magic) ? "%016llx " : "%08llx ", ptr->value);
-			else
-				__is_64_bytes(m->magic) ? print_nspaces(17) : print_nspaces(9);
-			printf("%c ", get_type_character(ptr, m));
-		}
-		name = (char *)((uintptr_t)m->strtab + ptr->stridx);
-		if (__readable(f, name, int16_t) == TRUE) {
-			puts(name);
-		} else {
-			printf("bad string index '%#016lx'\n", ADDRESS_START + ptr->stridx);
-		}
-		ptr = ptr->next;
+	if (root != NULL) {
+		print_tree(root->left);
+		print_node(m, root, opt);
+		print_tree(root->right);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 10:56:27 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/24 16:26:20 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,9 @@ int				list_symbols_from_file(struct file *f, size_t opt)
 	if (__is_supported(macho.magic) == FALSE)
 		return (-fputs("ft_nm: unsupported target\n", stderr));
 	if (get_symbols(f, &macho) == EXIT_SUCCESS) {
-//		sort_symbols(f, &macho, opt);
 		print_symbols(f, &macho, opt);
 		free_sections_list(macho.sections_list);
-		free_symbols_list(macho.symbols_list);
+		btree_free(macho.symbols_root);
 	} else { puts("ft_nm: no symbols"); }
 	return (EXIT_SUCCESS);
 }

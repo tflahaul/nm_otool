@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/17 15:35:22 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 10:58:31 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/24 15:55:05 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,6 @@ int			push_section(struct msection **head, struct section_64 *sect)
 void			free_sections_list(struct msection *head)
 {
 	struct msection	*ptr = head;
-
-	while (head != NULL) {
-		ptr = head->next;
-		free((void *)head);
-		head = ptr;
-	}
-}
-
-void			free_symbols_list(struct symbol *head)
-{
-	struct symbol	*ptr = head;
 
 	while (head != NULL) {
 		ptr = head->next;

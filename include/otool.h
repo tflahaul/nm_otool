@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:34:14 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 11:00:15 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/24 16:30:31 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # else
 #  error "Systems other than macOS are not supported"
 # endif /* __APPLE */
+
+# define ADDRESS_START	(0x100000000)
 
 int			print_section(struct file *, size_t);
 void			print_text_section(struct file *, struct section_64 *);

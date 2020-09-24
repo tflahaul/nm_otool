@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 14:10:41 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 10:57:31 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/24 15:55:48 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,5 @@ struct			msection
 
 int			push_section(struct msection **, struct section_64 *);
 void			free_sections_list(struct msection *);
-void			free_symbols_list(struct symbol *);
 
 #endif /* __SECTIONS_H__ */

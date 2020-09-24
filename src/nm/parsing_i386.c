@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 10:57:10 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/24 16:28:40 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,6 @@
 #endif /* __APPLE */
 #include <string.h>
 #include <stdint.h>
-
-static int			push_symbol(struct symbol **head, struct nlist *sym)
-{
-	struct symbol		*node;
-
-	if (sym->n_type & N_STAB)
-		return (EXIT_SUCCESS);
-	if ((node = (struct symbol *)malloc(sizeof(struct symbol))) == NULL)
-		return (-EXIT_FAILURE);
-	node->value = (uint64_t)sym->n_value;
-	node->stridx = sym->n_un.n_strx;
-	node->type = (uint32_t)sym->n_type;
-	node->sectid = (uint32_t)sym->n_sect;
-	node->next = (*head == NULL) ? NULL : *head;
-	*head = node;
-	return (EXIT_SUCCESS);
-}
 
 static int			parse_symtab(struct file *f, struct machobj *m, void const *ptr)
 {
@@ -60,7 +43,7 @@ static int			parse_symtab(struct file *f, struct machobj *m, void const *ptr)
 			memcpy(&symbol, &(offset[index]), sizeof(struct nlist));
 			if (m->magic == MH_CIGAM)
 				swap_nlist(&symbol, 1, NXHostByteOrder());
-			if (push_symbol(&(m->symbols_list), &symbol) != EXIT_SUCCESS)
+			if (insert_symbol(f, m, (struct nlist_64 *)(&symbol)) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
 		} else { return (-EXIT_FAILURE); }
 	}
@@ -122,6 +105,7 @@ int				get_symbols_i386(struct file *f, struct machobj *mach)
 			if (__readable(f, ptr, struct load_command) && ((struct load_command *)ptr)->cmdsize > 0) {
 				if (parse_load_command(f, mach, ptr) != EXIT_SUCCESS) {
 					free_sections_list(mach->sections_list);
+					btree_free(mach->symbols_root);
 					return (-EXIT_FAILURE);
 				}
 				ptr = (void *)((uintptr_t)ptr + ((struct load_command *)ptr)->cmdsize);
