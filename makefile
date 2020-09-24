@@ -6,14 +6,14 @@
 #    By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 22:08:10 by abrunet           #+#    #+#              #
-#    Updated: 2020/09/23 20:22:26 by thflahau         ###   ########.fr        #
+#    Updated: 2020/09/24 11:01:19 by thflahau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	ft_nm
 
 #######   DIRECTORIES   #######
-HDR		=	include
+HEADERS		=	include
 SRCDIR		=	src/nm
 OBJDIR		=	obj
 
@@ -26,7 +26,7 @@ CCFLAGS		=	-Wall					\
 			-Wpadded				\
 			-pedantic
 
-INCFLAG		=	-I $(HDR)
+INCFLAG		=	-I $(HEADERS)
 
 #########   SOURCES   #########
 SRCS		=	$(shell find $(SRCDIR) -type f -o -type l -name "*.c")

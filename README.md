@@ -4,6 +4,7 @@ The main focus here was to understand the Mach-O file format (macOS binaries), u
 TODO:
  - Trier les symboles pour nm en fonction des options
  - Utiliser le a.out par défault (uniquement pour la version 42)
- - otool récupérer le nom de fichier pour l'afficher et paufiner
+ - Pour otool, récupérer le nom des fichier et l'afficher + paufiner programme
  - makefile pour otool
- - Tester les deux programmer sur des binaires universels corrompus
+ - Tester nm sur des binaires universels corrompus ✓
+ - Tester otool sur des binaires corrompus

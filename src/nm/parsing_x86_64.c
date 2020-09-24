@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 11:46:15 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/24 10:55:28 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 #include "../../include/bytes.h"
 #include "../../include/parsing.h"
 #include "../../include/sections.h"
-#include <mach-o/loader.h>
-#include <mach-o/nlist.h>
-#include <mach-o/swap.h>
+#if defined __APPLE__
+# include <mach-o/loader.h>
+# include <mach-o/nlist.h>
+# include <mach-o/swap.h>
+#else
+# error "Systems other than macOS are not supported"
+#endif /* __APPLE__ */
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>

@@ -6,14 +6,17 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 14:10:41 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 11:59:05 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/24 10:57:31 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __SECTIONS_H__
 # define __SECTIONS_H__
-
-# include <mach-o/loader.h>
+# if defined __APPLE__
+#  include <mach-o/loader.h>
+# else
+#  error "Systems other than macOS are not supported"
+# endif /* __APPLE */
 # include <stdint.h>
 
 #pragma pack(push, 4)

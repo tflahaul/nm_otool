@@ -6,14 +6,18 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:04:28 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/23 20:57:21 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/24 10:59:52 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/nm.h"
 #include "../../include/bytes.h"
 #include "../../include/errors.h"
-#include <mach-o/loader.h>
+#if defined __APPLE__
+# include <mach-o/loader.h>
+#else
+# error "Systems other than macOS are not supported"
+#endif /* __APPLE */
 #include <stdint.h>
 #include <stdio.h>
 
