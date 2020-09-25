@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 11:25:24 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 10:06:42 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 16:48:37 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,22 @@ static int		get_type_character(struct symbol *sym, struct machobj *m)
 	return (type);
 }
 
-static void		print_node(struct machobj *m, struct symbol *sym, size_t opt)
+static void		print_node(struct machobj *mach, struct symbol *sym, size_t opt)
 {
 	if (!(opt & OPTION_J)) {
 		if (sym->value != 0 || (sym->value == 0 && (sym->type & N_TYPE) != N_UNDF))
-			printf(__is_64_bytes(m->magic) ? "%016llx " : "%08llx ", sym->value);
-		else
-			__is_64_bytes(m->magic) ? printf("%*c", 17, ' ') : printf("%*c", 9, ' ');
-		printf("%c ", get_type_character(sym, m));
+			printf(__is_64_bytes(mach->magic) ? "%016llx " : "%08llx ", sym->value);
+		} else {
+			printf("%*c", __is_64_bytes(mach->magic) ? 17 : 9, ' ');
+		}
+		printf("%c ", get_type_character(sym, mach));
 	}
 	puts(sym->name);
 }
 
-void			print_symbols(struct machobj *m, struct arguments *args)
+void			print_symbols(struct machobj *mach, struct arguments *args)
 {
-	struct symbol	*root = m->symbols_root;
+	struct symbol	*root = mach->symbols_root;
 	struct symbol	*prev = NULL;
 
 	if (args->size > 1)
@@ -96,11 +97,11 @@ void			print_symbols(struct machobj *m, struct arguments *args)
 				root = root->left;
 			} else {
 				prev->right = NULL;
-				print_node(m, root, args->options);
+				print_node(mach, root, args->options);
 				root = root->right;
 			}
 		} else {
-			print_node(m, root, args->options);
+			print_node(mach, root, args->options);
 			root = root->right;
 		}
 	}

@@ -6,6 +6,7 @@ TODO:
  - Utiliser le a.out par défault (uniquement pour la version 42)
  - Pour otool, récupérer le nom des fichier et l'afficher + paufiner programme
  - makefile pour otool
+ - Tester sur des librairies statiques (.a)
  - Tester nm sur des binaires universels corrompus ✓
  - Tester otool sur des binaires corrompus
  - Mettre des commentaires

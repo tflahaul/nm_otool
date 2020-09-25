@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bytes.h                                            :+:      :+:    :+:   */
+/*   file.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/08 19:27:26 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 17:10:31 by thflahau         ###   ########.fr       */
+/*   Created: 2020/09/25 15:36:30 by thflahau          #+#    #+#             */
+/*   Updated: 2020/09/25 15:37:10 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef __BYTES_H__
-# define __BYTES_H__
+#ifndef __FILE_H__
+# define __FILE_H__
 
-# include "file.h"
 # include <stdint.h>
 
-# define __end_addr(f)		((uintptr_t)f->head + f->length)
-# define __readable(f, p, type)	((uintptr_t)p >= (uintptr_t)f->head && (uintptr_t)p <= __end_addr(f) - sizeof(type))
+struct			file
+{
+	void		*head;
+	uintptr_t	length;
+};
 
-uint32_t		safe_read_u32(struct file *, uintptr_t);
-uint64_t		safe_read_u64(struct file *, uintptr_t);
-uint32_t		swap_uint32(uint32_t);
-
-#endif /* __BYTES_H__ */
+#endif /* __FILE_H__ */

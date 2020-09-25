@@ -6,14 +6,13 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 09:44:51 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 17:02:31 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/nm.h"
-#include "../../include/errors.h"
 #include "../../include/bytes.h"
-#include "../../include/parsing.h"
+#include "../../include/errors.h"
 #include "../../include/sections.h"
 #if defined __APPLE__
 # include <mach-o/loader.h>
@@ -25,90 +24,90 @@
 #include <string.h>
 #include <stdint.h>
 
-static int			parse_symtab(struct file *f, struct machobj *m, void const *ptr)
+static int			parse_symtab(struct machobj *mach, void const *off)
 {
 	struct symtab_command	symtab;
 	struct nlist		symbol;
 	struct nlist		*offset;
 
-	memcpy(&symtab, ptr, sizeof(struct symtab_command));
-	if (m->magic == MH_CIGAM)
+	memcpy(&symtab, off, sizeof(struct symtab_command));
+	if (mach->magic == MH_CIGAM)
 		swap_symtab_command(&symtab, NXHostByteOrder());
 	if (symtab.cmdsize != sizeof(struct symtab_command))
 		return (-EXIT_FAILURE);
-	m->strtab = (void *)((uintptr_t)m->offset + symtab.stroff);
-	offset = (void *)((uintptr_t)m->offset + symtab.symoff);
+	mach->strtab = (void *)((uintptr_t)mach->object.head + symtab.stroff);
+	offset = (void *)((uintptr_t)mach->object.head + symtab.symoff);
 	for (register uint32_t index = 0; index < symtab.nsyms; ++index) {
-		if (__readable(f, &(offset[index]), struct nlist) == TRUE) {
+		if (__readable(&(mach->object), &(offset[index]), struct nlist) == TRUE) {
 			memcpy(&symbol, &(offset[index]), sizeof(struct nlist));
-			if (m->magic == MH_CIGAM)
+			if (mach->magic == MH_CIGAM)
 				swap_nlist(&symbol, 1, NXHostByteOrder());
-			if (insert_symbol(f, m, (struct nlist_64 *)(&symbol)) != EXIT_SUCCESS)
+			if (insert_symbol(mach, (struct nlist_64 *)(&symbol)) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
 		} else { return (-EXIT_FAILURE); }
 	}
 	return (EXIT_SUCCESS);
 }
 
-static int			parse_segment(struct file *f, struct machobj *m, void const *ptr)
+static int			parse_segment(struct machobj *mach, void const *off)
 {
 	struct segment_command	segment;
 	struct section		section;
 	struct section		*secptr;
 
-	memcpy(&segment, ptr, sizeof(struct segment_command));
-	if (m->magic == MH_CIGAM)
+	memcpy(&segment, off, sizeof(struct segment_command));
+	if (mach->magic == MH_CIGAM)
 		swap_segment_command(&segment, NXHostByteOrder());
-	secptr = (struct section *)((uintptr_t)ptr + sizeof(struct segment_command));
-	for (register uint32_t idx = 0; idx < segment.nsects; ++idx) {
-		if (__readable(f, &(secptr[idx]), struct section) == TRUE) {
-			memcpy(&section, &(secptr[idx]), sizeof(struct section));
-			if (m->magic == MH_CIGAM)
+	secptr = (struct section *)((uintptr_t)off + sizeof(struct segment_command));
+	for (register uint32_t index = 0; index < segment.nsects; ++index) {
+		if (__readable(&(mach->object), &(secptr[index]), struct section) == TRUE) {
+			memcpy(&section, &(secptr[index]), sizeof(struct section));
+			if (mach->magic == MH_CIGAM)
 				swap_section(&section, 1, NXHostByteOrder());
-			if (push_section(&(m->sections_list), &section) != EXIT_SUCCESS)
+			if (push_section(&(mach->sections_list), &section) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
 		} else { return (-EXIT_FAILURE); }
 	}
 	return (EXIT_SUCCESS);
 }
 
-static int			parse_load_command(struct file *f, struct machobj *mach, void *ptr)
+static int			parse_load_command(struct machobj *mach, void const *off)
 {
 	struct load_command	loadcmd;
 
-	memcpy(&loadcmd, ptr, sizeof(struct load_command));
+	memcpy(&loadcmd, off, sizeof(struct load_command));
 	if (mach->magic == MH_CIGAM)
 		swap_load_command(&loadcmd, NXHostByteOrder());
-	if ((uintptr_t)ptr + loadcmd.cmdsize <= (uintptr_t)f->head + f->length) {
+	if ((uintptr_t)off + loadcmd.cmdsize <= __end_addr(&(mach->object))) {
 		if (loadcmd.cmd == LC_SYMTAB) {
-			if (parse_symtab(f, mach, ptr) != EXIT_SUCCESS)
+			if (parse_symtab(mach, off) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
 		} else if (loadcmd.cmd == LC_SEGMENT) {
-			if (parse_segment(f, mach, ptr) != EXIT_SUCCESS)
+			if (parse_segment(mach, off) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
 		}
 	}
 	return (EXIT_SUCCESS);
 }
 
-int				get_symbols_i386(struct file *f, struct machobj *mach)
+int				get_symbols_i386(struct machobj *mach)
 {
 	struct mach_header	header;
-	void			*ptr;
+	struct load_command	*ptr;
 
-	if (__readable(f, mach->offset, struct mach_header) == TRUE) {
-		memcpy(&header, mach->offset, sizeof(struct mach_header));
+	if (__readable(&(mach->object), mach->object.head, struct mach_header) == TRUE) {
+		memcpy(&header, mach->object.head, sizeof(struct mach_header));
 		if (mach->magic == MH_CIGAM)
 			swap_mach_header(&header, NXHostByteOrder());
-		ptr = (void *)((uintptr_t)mach->offset + sizeof(struct mach_header));
+		ptr = (struct load_command *)((uintptr_t)mach->object.head + sizeof(struct mach_header));
 		for (uint32_t index = 0; index < header.ncmds; ++index) {
-			if (__readable(f, ptr, struct load_command) && ((struct load_command *)ptr)->cmdsize > 0) {
-				if (parse_load_command(f, mach, ptr) != EXIT_SUCCESS) {
+			if (__readable(&(mach->object), ptr, struct load_command) && ptr->cmdsize > 0) {
+				if (parse_load_command(mach, ptr) != EXIT_SUCCESS) {
 					free_sections_list(mach->sections_list);
 					btree_free(mach->symbols_root);
 					return (-EXIT_FAILURE);
 				}
-				ptr = (void *)((uintptr_t)ptr + ((struct load_command *)ptr)->cmdsize);
+				ptr = (void *)((uintptr_t)ptr + ptr->cmdsize);
 			} else { return (-EXIT_FAILURE); }
 		}
 	}

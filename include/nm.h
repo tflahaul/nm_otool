@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 10:00:48 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 16:29:15 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # endif /* __APPLE__ */
 
 # include "arguments.h"
+# include "file.h"
 # include <stdint.h>
 # include <unistd.h>
 
@@ -44,21 +45,17 @@ struct			machobj
 	struct msection	*sections_list;
 	struct symbol	*symbols_root;
 	void		*strtab;
-	void		*offset;
+	struct file	object;
 	uint32_t	magic;
 };
 
 # pragma pack(pop)
 
-struct			file
-{
-	void		*head;
-	uintptr_t	length;
-};
-
 int		load_file_informations(struct file *, char const *);
 int		list_symbols_from_file(struct file *, struct arguments *);
-int		insert_symbol(struct file *f, struct machobj *, struct nlist_64 *);
+int		get_symbols_i386(struct machobj *);
+int		get_symbols_x86_64(struct machobj *);
+int		insert_symbol(struct machobj *, struct nlist_64 *);
 void		print_symbols(struct machobj *, struct arguments *);
 void		btree_free(struct symbol *);
 
