@@ -6,11 +6,12 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 18:04:28 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 10:59:52 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 09:38:15 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/nm.h"
+#include "../../include/otool.h"
 #include "../../include/bytes.h"
 #include "../../include/errors.h"
 #if defined __APPLE__

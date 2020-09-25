@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/23 19:57:58 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 10:18:59 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,9 @@
 
 # include <unistd.h>
 
-# define OPTION_R	0x00001ul
 # define OPTION_D	0x00004ul
 # define OPTION_J	0x00008ul
 # define OPTION_U	(0x0002ul | OPTION_J)
-# define OPTION_P	0x00010ul
-# define OPTION_N	0x00020ul
 # define OPTION_S	0x00040ul
 
 enum			e_needargs {
@@ -39,6 +36,7 @@ struct			arguments {
 	char		**arguments;
 	size_t		options;
 	size_t		size;
+	size_t		idx;
 };
 
 void			parse_arguments(struct arguments *, int, char const **);

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 11:25:24 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 16:35:06 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 10:06:42 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,6 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
-
-static inline void	print_nspaces(int x)
-{
-	char		buffer[256];
-
-	memset(buffer, ' ', sizeof(buffer));
-	buffer[256 - 1] = 0;
-	write(STDOUT_FILENO, buffer, (size_t)x);
-}
 
 static struct msection	*find_section(struct msection *head, uint32_t id)
 {
@@ -82,19 +73,35 @@ static void		print_node(struct machobj *m, struct symbol *sym, size_t opt)
 		if (sym->value != 0 || (sym->value == 0 && (sym->type & N_TYPE) != N_UNDF))
 			printf(__is_64_bytes(m->magic) ? "%016llx " : "%08llx ", sym->value);
 		else
-			__is_64_bytes(m->magic) ? print_nspaces(17) : print_nspaces(9);
+			__is_64_bytes(m->magic) ? printf("%*c", 17, ' ') : printf("%*c", 9, ' ');
 		printf("%c ", get_type_character(sym, m));
 	}
 	puts(sym->name);
 }
 
-void			print_symbols(struct file *f, struct machobj *m, size_t opt)
+void			print_symbols(struct machobj *m, struct arguments *args)
 {
 	struct symbol	*root = m->symbols_root;
+	struct symbol	*prev = NULL;
 
-	if (root != NULL) {
-		print_tree(root->left);
-		print_node(m, root, opt);
-		print_tree(root->right);
+	if (args->size > 1)
+		printf("\n%s:\n", args->arguments[args->idx]);
+	while (root != NULL) {
+		if (root->left != NULL) {
+			prev = root->left;
+			while (prev->right != NULL && prev->right != root)
+				prev = prev->right;
+			if (prev->right == NULL) {
+				prev->right = root;
+				root = root->left;
+			} else {
+				prev->right = NULL;
+				print_node(m, root, args->options);
+				root = root->right;
+			}
+		} else {
+			print_node(m, root, args->options);
+			root = root->right;
+		}
 	}
 }

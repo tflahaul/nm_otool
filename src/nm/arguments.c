@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 09:03:59 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 10:18:20 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@
 static struct option	g_options[] = {
 	{"-undefined-only", OPTION_U, no_argument, 'u'},
 	{"-defined-only",   OPTION_D, no_argument, 'd'},
-	{"-numeric-sort",   OPTION_N, no_argument, 'n'},
-	{"-reverse-sort",   OPTION_R, no_argument, 'r'},
 	{"-names-only",     OPTION_J, no_argument, 'j'},
-	{"-no-sort",        OPTION_P, no_argument, 'p'},
 	{"-help",           0,        no_argument, 'h'},
 	{0, 0, 0, 0}
 };
@@ -57,7 +54,7 @@ void			parse_arguments(struct arguments *args, int ac, char const **av)
 	unsigned int	index = 0;
 	struct option	*option = NULL;
 
-	args->options = 0;
+	memset(args, 0, sizeof(struct arguments));
 	while (++index < (unsigned int)ac && av[index][0] == '-') {
 		if ((option = search_option(av[index] + 1)) == NULL) {
 			fprintf(stderr, "ft_nm: invalid option '%s'\n", av[index]);

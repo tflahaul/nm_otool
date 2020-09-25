@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 16:30:25 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 10:00:48 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@
 #  error "Systems other than macOS are not supported"
 # endif /* __APPLE__ */
 
+# include "arguments.h"
 # include <stdint.h>
 # include <unistd.h>
 
 # pragma pack(push, 4)
+
 struct			symbol
 {
 	uint32_t	type;
@@ -55,9 +57,9 @@ struct			file
 };
 
 int		load_file_informations(struct file *, char const *);
-int		list_symbols_from_file(struct file *, size_t);
+int		list_symbols_from_file(struct file *, struct arguments *);
 int		insert_symbol(struct file *f, struct machobj *, struct nlist_64 *);
-void		print_symbols(struct file *, struct machobj *, size_t);
+void		print_symbols(struct machobj *, struct arguments *);
 void		btree_free(struct symbol *);
 
 #endif /* __NM_H__ */

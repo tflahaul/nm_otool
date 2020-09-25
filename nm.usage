@@ -3,8 +3,5 @@ List symbols in [file(s)] (a.out by default).
 Available options are:
     -u, --undefined-only  Display only undefined symbols
     -d, --defined-only    Display only defined symbols
-    -n, --numeric-sort    Sort symbols numerically by address
-    -r, --reverse-sort    Reverse the sense of the sort
     -j, --names-only      Display only symbols names
-    -p, --no-sort         Do not sort the symbols
     -h, --help            Display this information

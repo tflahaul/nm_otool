@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/24 15:31:44 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 16:16:55 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 10:16:36 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static inline char	*safe_get_name(struct file *f, struct machobj *m, uint32_t id
 	char const	*name = (char *)((uintptr_t)m->strtab + idx);
 
 	if (__readable(f, name, int16_t) == TRUE)
-		return (name);
+		return ((char *)name);
 	return ("bad string index");
 }
 
@@ -37,7 +37,7 @@ static struct symbol	*btree_new_node(struct file *f, struct machobj *m, struct n
 
 	if ((node = (struct symbol *)malloc(sizeof(struct symbol))) == NULL)
 		return (NULL);
-	node->value = sym->n_value;
+	node->value = __is_64_bytes(m->magic) ? sym->n_value : (uint32_t)sym->n_value;
 	node->name = safe_get_name(f, m, sym->n_un.n_strx);
 	node->type = (uint32_t)sym->n_type;
 	node->sectid = (uint32_t)sym->n_sect;
@@ -48,8 +48,8 @@ static struct symbol	*btree_new_node(struct file *f, struct machobj *m, struct n
 
 static struct symbol	*btree_insert(struct symbol *root, struct symbol *node)
 {
-	if (node == NULL)
-		return (NULL);
+	if (root == NULL)
+		return (node);
 	if (strcmp(root->name, node->name) > 0)
 		root->left = btree_insert(root->left, node);
 	else
@@ -61,10 +61,7 @@ int			insert_symbol(struct file *f, struct machobj *m, struct nlist_64 *sym)
 {
 	if (sym->n_type & N_STAB)
 		return (EXIT_SUCCESS);
-	if (m->symbols_root == NULL) {
-		if ((m->symbols_root = btree_new_node(f, m, sym)) == NULL)
-			return (-EXIT_FAILURE);
-	} else if (btree_insert(m->symbols_root, btree_new_node(f, m, sym)) == NULL)
+	if (!(m->symbols_root = btree_insert(m->symbols_root, btree_new_node(f, m, sym))))
 		return (-EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

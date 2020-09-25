@@ -6,15 +6,16 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 16:26:20 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 10:07:34 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/errors.h"
+#include "../../include/nm.h"
 #include "../../include/bytes.h"
+#include "../../include/errors.h"
 #include "../../include/parsing.h"
 #include "../../include/sections.h"
-#include "../../include/nm.h"
+#include "../../include/arguments.h"
 #if defined __APPLE__
 # include <mach-o/loader.h>
 # include <mach-o/swap.h>
@@ -56,7 +57,7 @@ static ssize_t			get_supported_macho_section(struct file *f)
 	return (-EXIT_FAILURE);
 }
 
-int				list_symbols_from_file(struct file *f, size_t opt)
+int				list_symbols_from_file(struct file *f, struct arguments *args)
 {
 	ssize_t			off = 0;
 	uint32_t const		magic = safe_read_u32(f, (uintptr_t)f->head);
@@ -69,11 +70,11 @@ int				list_symbols_from_file(struct file *f, size_t opt)
 			macho.offset = (void *)((uintptr_t)f->head + (uintptr_t)off);
 	macho.magic = safe_read_u32(f, (uintptr_t)macho.offset);
 	if (__is_supported(macho.magic) == FALSE)
-		return (-fputs("ft_nm: unsupported target\n", stderr));
+		return (-fprintf(stderr, "%s: unsupported target\n", args->arguments[args->idx]));
 	if (get_symbols(f, &macho) == EXIT_SUCCESS) {
-		print_symbols(f, &macho, opt);
+		print_symbols(&macho, args);
 		free_sections_list(macho.sections_list);
 		btree_free(macho.symbols_root);
-	} else { puts("ft_nm: no symbols"); }
+	} else { printf("%s: no symbols\n", args->arguments[args->idx]); }
 	return (EXIT_SUCCESS);
 }

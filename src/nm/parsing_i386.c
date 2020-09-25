@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 16:28:40 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 09:44:51 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ static int			parse_segment(struct file *f, struct machobj *m, void const *ptr)
 			memcpy(&section, &(secptr[idx]), sizeof(struct section));
 			if (m->magic == MH_CIGAM)
 				swap_section(&section, 1, NXHostByteOrder());
-//			if (push_section(&(m->sections_list), &section) != EXIT_SUCCESS)
-//				return (-EXIT_FAILURE);
+			if (push_section(&(m->sections_list), &section) != EXIT_SUCCESS)
+				return (-EXIT_FAILURE);
 		} else { return (-EXIT_FAILURE); }
 	}
 	return (EXIT_SUCCESS);

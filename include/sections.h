@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 14:10:41 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 15:55:48 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 09:45:12 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ struct			msection
 
 #pragma pack(pop)
 
-int			push_section(struct msection **, struct section_64 *);
+int			push_section(struct msection **, struct section *);
+int			push_section_64(struct msection **, struct section_64 *);
 void			free_sections_list(struct msection *);
 
 #endif /* __SECTIONS_H__ */

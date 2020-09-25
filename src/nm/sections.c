@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/17 15:35:22 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/24 15:55:05 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/25 09:44:36 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-int			push_section(struct msection **head, struct section_64 *sect)
+int			push_section_64(struct msection **head, struct section_64 *sect)
+{
+	struct msection	*node;
+
+	if ((node = (struct msection *)malloc(sizeof(struct msection))) == NULL)
+		return (-EXIT_FAILURE);
+	memset(node->sectname, 0, sizeof(node->sectname));
+	memcpy(node->sectname, sect->sectname, strnlen(sect->sectname, 15));
+	node->next = (*head == NULL) ? NULL : *head;
+	node->id = (*head == NULL) ? 1 : (*head)->id + 1;
+	*head = node;
+	return (EXIT_SUCCESS);
+}
+
+int			push_section(struct msection **head, struct section *sect)
 {
 	struct msection	*node;
 
