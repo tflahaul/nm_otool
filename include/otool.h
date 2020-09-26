@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:34:14 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 16:56:51 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/26 12:17:21 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,30 @@
 #  error "Systems other than macOS are not supported"
 # endif /* __APPLE */
 
-# include "nm.h"
 # include "file.h"
+# include "arguments.h"
 # include <unistd.h>
+# include <stdint.h>
 
 # define BASE_ADDRESS	(0x100000000)
 
 /* Minimum length of sequence of graphic chars to trigger output */
 # define MIN_LENGTH	4
+# pragma pack(push, 4)
 
-void			print_strings(struct machobj *);
-void			print_text_section(struct machobj *, struct section_64 *);
-int			get_section_x86_64(struct machobj *);
-int			get_section_i386(struct machobj *);
-int			print_section(struct file *, size_t);
+struct			machsect
+{
+	struct file	object;
+	struct file	section;
+	uint32_t	magic;
+};
+
+# pragma pack(pop)
+
+int			print_strings(struct file *);
+int			print_section(struct file *, struct arguments *);
+int			get_section_x86_64(struct machsect *);
+int			get_section_i386(struct machsect *);
+void			print_text_section(struct machsect *, struct arguments *);
 
 #endif /* __OTOOL_H__ */

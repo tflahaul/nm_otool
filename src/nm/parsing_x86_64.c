@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 17:01:57 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/26 12:12:18 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int				get_symbols_x86_64(struct machobj *mach)
 		if (mach->magic == MH_CIGAM_64)
 			swap_mach_header_64(&header, NXHostByteOrder());
 		ptr = (struct load_command *)((uintptr_t)mach->object.head + sizeof(struct mach_header_64));
-		for (register uint32_t index = 0; index < header.ncmds; ++index) {
+		for (unsigned int index = 0; index < header.ncmds; ++index) {
 			if (__readable(&(mach->object), ptr, struct load_command) && ptr->cmdsize > 0) {
 				if (parse_load_command(mach, ptr) != EXIT_SUCCESS) {
 					free_sections_list(mach->sections_list);

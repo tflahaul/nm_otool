@@ -6,14 +6,14 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:30:56 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/23 18:14:49 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/26 11:42:53 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/arguments.h"
 #include "../../include/errors.h"
 #include "../../include/otool.h"
-#include "../../include/nm.h"
+#include "../../include/file.h"
 #include <sys/mman.h>
 #include <string.h>
 

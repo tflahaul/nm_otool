@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 16:55:37 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/26 12:11:21 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,22 @@ static int			get_supported_macho_section(struct machobj *mach)
 	struct fat_arch		archi;
 	struct fat_arch		*ptr = (struct fat_arch *)((uintptr_t)mach->object.head + sizeof(struct fat_header));
 
-	if (mach->object.length >= sizeof(struct fat_header)) {
-		memcpy(&header, mach->object.head, sizeof(struct fat_header));
-		if (header.magic == FAT_CIGAM)
-			swap_fat_header(&header, NXHostByteOrder());
-		for (register uint32_t index = 0; index < header.nfat_arch; ++index) {
-			if (__readable(&(mach->object), &(ptr[index]), struct fat_arch) == TRUE) {
-				memcpy(&archi, &(ptr[index]), sizeof(struct fat_arch));
-				if (mach->magic == FAT_CIGAM)
-					swap_fat_arch(&archi, 1, NXHostByteOrder());
-				if (archi.cputype == CPU_TYPE_X86_64 || archi.cputype == CPU_TYPE_I386) {
-					mach->object.head = (void *)((uintptr_t)mach->object.head + archi.offset);
-					mach->object.length = (size_t)archi.size;
-					return (EXIT_SUCCESS);
-				}
-			} else { return (-EXIT_FAILURE); }
-		}
+	if (mach->object.length < sizeof(struct fat_header))
+		return (-EXIT_FAILURE);
+	memcpy(&header, mach->object.head, sizeof(struct fat_header));
+	if (header.magic == FAT_CIGAM)
+		swap_fat_header(&header, NXHostByteOrder());
+	for (register uint32_t index = 0; index < header.nfat_arch; ++index) {
+		if (__readable(&(mach->object), &(ptr[index]), struct fat_arch) == TRUE) {
+			memcpy(&archi, &(ptr[index]), sizeof(struct fat_arch));
+			if (mach->magic == FAT_CIGAM)
+				swap_fat_arch(&archi, 1, NXHostByteOrder());
+			if (archi.cputype == CPU_TYPE_X86_64 || archi.cputype == CPU_TYPE_I386) {
+				mach->object.head = (void *)((uintptr_t)mach->object.head + archi.offset);
+				mach->object.length = (size_t)archi.size;
+				return (EXIT_SUCCESS);
+			}
+		} else { return (-EXIT_FAILURE); }
 	}
 	return (-EXIT_FAILURE);
 }
@@ -75,6 +75,8 @@ int				list_symbols_from_file(struct file *f, struct arguments *args)
 		print_symbols(&mach, args);
 		free_sections_list(mach.sections_list);
 		btree_free(mach.symbols_root);
-	} else { printf("%s: no symbols\n", args->arguments[args->idx]); }
+	} else {
+		printf("%s: no symbols\n", args->arguments[args->idx]);
+	}
 	return (EXIT_SUCCESS);
 }

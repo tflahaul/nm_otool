@@ -6,12 +6,12 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 19:27:53 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/21 09:01:53 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/26 12:02:35 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/bytes.h"
-#include "../../include/nm.h"
+#include "../../include/file.h"
 #include <stdint.h>
 
 uint32_t		safe_read_u32(struct file *f, uintptr_t ptr)
