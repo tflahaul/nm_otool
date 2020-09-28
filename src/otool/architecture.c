@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:33:18 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 10:21:55 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 12:02:26 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include <unistd.h>
 #include <string.h>
 
-static inline int		get_text_section(struct machsect *mach)
+static inline int		get_target_section(struct machsect *mach)
 {
 	return (__is_64_bytes(mach->magic) ? get_section_x86_64(mach) : get_section_i386(mach));
 }
@@ -66,6 +66,7 @@ int				print_section(struct file *f, struct arguments *args)
 	memset(&mach, 0, sizeof(struct machsect));
 	memcpy(&(mach.object), f, sizeof(struct file));
 	mach.magic = safe_read_u32(f, f->head);
+	mach.target = (args->options & OPTION_S) ? "__cstring" : SECT_TEXT;
 	if (__is_universal(mach.magic) == TRUE)
 		if (get_supported_macho_section(&mach) != EXIT_SUCCESS)
 			return (-EXIT_FAILURE);
@@ -73,12 +74,10 @@ int				print_section(struct file *f, struct arguments *args)
 		return (-fprintf(stderr, "%s: malformed object file\n", args->arguments[args->idx]));
 	if (__is_supported(mach.magic) == FALSE)
 		return (-fprintf(stderr, "%s: unsupported target\n", args->arguments[args->idx]));
-	if ((args->options & OPTION_S))
-		return (print_strings(&(mach.object)));
-	if (get_text_section(&mach) == EXIT_SUCCESS && mach.section.head != NULL && mach.section.length > 0) {
-		print_text_section(&mach, args);
+	if (get_target_section(&mach) == EXIT_SUCCESS && mach.section.head != NULL && mach.section.length > 0) {
+		print_target_section(&mach, args);
 	} else {
-		fprintf(stderr, "%s: no (__TEXT,__text) section\n", args->arguments[args->idx]);
+		fprintf(stderr, "%s: no (__TEXT,%s) section\n", args->arguments[args->idx], mach.target);
 	}
 	return (EXIT_SUCCESS);
 }

@@ -10,11 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	ft_nm
+NAME		=	ft_otool
 
 #######   DIRECTORIES   #######
 HEADERS		=	include
-SRCDIR		=	src/nm
+SRCDIR		=	src/otool
 OBJDIR		=	obj
 
 DIRS		=	$(patsubst $(SRCDIR)%, $(OBJDIR)%, $(shell find $(SRCDIR) -type d))

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:37:20 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 10:30:47 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 11:37:04 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int			parse_segment(struct machsect *mach, uint32_t nsects, void const *o
 			memcpy(&section, &(secptr[index]), sizeof(struct section));
 			if (mach->magic == MH_CIGAM)
 				swap_section(&section, 1, NXHostByteOrder());
-			if (strcmp(section.segname, SEG_TEXT) == 0 && strcmp(section.sectname, SECT_TEXT) == 0) {
+			if (strcmp(section.segname, SEG_TEXT) == 0 && strcmp(section.sectname, mach->target) == 0) {
 				if ((uintptr_t)mach->object.head + section.offset + section.size < __end_addr(&(mach->object))) {
 					mach->section.head = (void *)((uintptr_t)mach->object.head + section.offset);
 					mach->section.length = (uintptr_t)section.size;
