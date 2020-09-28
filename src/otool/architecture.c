@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:33:18 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 12:02:26 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 12:28:29 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int			get_supported_macho_section(struct machsect *mach)
 	memcpy(&header, mach->object.head, sizeof(struct fat_header));
 	if (header.magic == FAT_CIGAM)
 		swap_fat_header(&header, NXHostByteOrder());
-	for (uint32_t index = 0; index < header.nfat_arch; ++index) {
+	for (register uint32_t index = 0; index < header.nfat_arch; ++index) {
 		if (__is_readable(&(mach->object), &(ptr[index]), sizeof(struct fat_arch))) {
 			memcpy(&archi, &(ptr[index]), sizeof(struct fat_arch));
 			if (mach->magic == FAT_CIGAM)
@@ -52,7 +52,7 @@ static int			get_supported_macho_section(struct machsect *mach)
 					mach->object.head = (void *)((uintptr_t)mach->object.head + archi.offset);
 					mach->object.length = (size_t)archi.size;
 					return (EXIT_SUCCESS);
-				}
+				} else { return (-EXIT_FAILURE); }
 			}
 		} else { return (-EXIT_FAILURE); }
 	}

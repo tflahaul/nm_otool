@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 09:56:29 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 12:27:13 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include "file.h"
 # include <stdint.h>
 # include <unistd.h>
+
+# define MIN_LENGTH	4
 
 # pragma pack(push, 4)
 

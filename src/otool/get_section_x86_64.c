@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:37:18 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 11:37:13 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 12:21:13 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int				get_section_x86_64(struct machsect *mach)
 		if (__is_readable(&(mach->object), ptr, sizeof(struct load_command)) && ptr->cmdsize > 0) {
 			if (parse_load_command(mach, ptr) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
-		else if (mach->section.head != NULL)
+			else if (mach->section.head != NULL)
 				return (EXIT_SUCCESS);
 			ptr = (void *)((uintptr_t)ptr + ptr->cmdsize);
 		} else { return (-EXIT_FAILURE); }

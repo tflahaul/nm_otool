@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 09:28:16 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 12:28:11 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,11 @@ static int			get_supported_macho_section(struct machobj *mach)
 			if (mach->magic == FAT_CIGAM)
 				swap_fat_arch(&archi, 1, NXHostByteOrder());
 			if (archi.cputype == CPU_TYPE_X86_64 || archi.cputype == CPU_TYPE_I386) {
-				mach->object.head = (void *)((uintptr_t)mach->object.head + archi.offset);
-				mach->object.length = (size_t)archi.size;
-				return (EXIT_SUCCESS);
+				if ((uintptr_t)mach->object.head + archi.offset + archi.size < __end_addr(&(mach->object))) {
+					mach->object.head = (void *)((uintptr_t)mach->object.head + archi.offset);
+					mach->object.length = (size_t)archi.size;
+					return (EXIT_SUCCESS);
+				} else { return (-EXIT_FAILURE); }
 			}
 		} else { return (-EXIT_FAILURE); }
 	}
