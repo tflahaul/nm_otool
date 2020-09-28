@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:34:14 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 11:44:58 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 21:54:53 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int			print_strings(struct file *);
 int			print_section(struct file *, struct arguments *);
 int			get_section_x86_64(struct machsect *);
 int			get_section_i386(struct machsect *);
-void			print_target_section(struct machsect *, struct arguments *);
+void			print_strings_section(struct machsect *, struct arguments *);
+void			print_text_section(struct machsect *, struct arguments *);
 
 #endif /* __OTOOL_H__ */

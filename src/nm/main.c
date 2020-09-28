@@ -6,12 +6,13 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:31 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 10:08:50 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 20:26:35 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/arguments.h"
 #include "../../include/errors.h"
+#include "../../include/file.h"
 #include "../../include/nm.h"
 #include <sys/mman.h>
 #include <string.h>

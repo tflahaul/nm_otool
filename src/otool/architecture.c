@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:33:18 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 12:28:29 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 21:54:06 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ int				print_section(struct file *f, struct arguments *args)
 	if (__is_supported(mach.magic) == FALSE)
 		return (-fprintf(stderr, "%s: unsupported target\n", args->arguments[args->idx]));
 	if (get_target_section(&mach) == EXIT_SUCCESS && mach.section.head != NULL && mach.section.length > 0) {
-		print_target_section(&mach, args);
+		if (args->options & OPTION_S)
+			print_strings_section(&mach, args);
+		else
+			print_text_section(&mach, args);
 	} else {
 		fprintf(stderr, "%s: no (__TEXT,%s) section\n", args->arguments[args->idx], mach.target);
 	}
