@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 16:29:15 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 09:49:38 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int		load_file_informations(struct file *, char const *);
 int		list_symbols_from_file(struct file *, struct arguments *);
 int		get_symbols_i386(struct machobj *);
 int		get_symbols_x86_64(struct machobj *);
-int		insert_symbol(struct machobj *, struct nlist_64 *);
+int		insert_symbol(struct machobj *, void *);
 void		print_symbols(struct machobj *, struct arguments *);
 void		btree_free(struct symbol *);
 

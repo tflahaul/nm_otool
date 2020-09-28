@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/26 12:12:18 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 09:51:14 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ static int			parse_symtab(struct machobj *mach, void const *off)
 	mach->strtab = (void *)((uintptr_t)mach->object.head + symtab.stroff);
 	offset = (void *)((uintptr_t)mach->object.head + symtab.symoff);
 	for (register uint32_t index = 0; index < symtab.nsyms; ++index) {
-		if (__readable(&(mach->object), &(offset[index]), struct nlist_64) == TRUE) {
+		if (__is_readable(&(mach->object), &(offset[index]), sizeof(struct nlist_64))) {
 			memcpy(&symbol, &(offset[index]), sizeof(struct nlist_64));
 			if (mach->magic == MH_CIGAM_64)
 				swap_nlist_64(&symbol, 1, NXHostByteOrder());
-			if (insert_symbol(mach, &symbol) != EXIT_SUCCESS)
+			if (insert_symbol(mach, (void *)(&symbol)) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
 		} else { return (-EXIT_FAILURE); }
 	}
@@ -61,7 +61,7 @@ static int			parse_segment(struct machobj *mach, void const *off)
 		swap_segment_command_64(&segment, NXHostByteOrder());
 	secptr = (struct section_64 *)((uintptr_t)off + sizeof(struct segment_command_64));
 	for (register uint32_t index = 0; index < segment.nsects; ++index) {
-		if (__readable(&(mach->object), &(secptr[index]), struct section_64) == TRUE) {
+		if (__is_readable(&(mach->object), &(secptr[index]), sizeof(struct section_64))) {
 			memcpy(&section, &(secptr[index]), sizeof(struct section_64));
 			if (mach->magic == MH_CIGAM_64)
 				swap_section_64(&section, 1, NXHostByteOrder());
@@ -96,21 +96,21 @@ int				get_symbols_x86_64(struct machobj *mach)
 	struct mach_header_64	header;
 	struct load_command	*ptr;
 
-	if (__readable(&(mach->object), mach->object.head, struct mach_header_64) == TRUE) {
-		memcpy(&header, mach->object.head, sizeof(struct mach_header_64));
-		if (mach->magic == MH_CIGAM_64)
-			swap_mach_header_64(&header, NXHostByteOrder());
-		ptr = (struct load_command *)((uintptr_t)mach->object.head + sizeof(struct mach_header_64));
-		for (unsigned int index = 0; index < header.ncmds; ++index) {
-			if (__readable(&(mach->object), ptr, struct load_command) && ptr->cmdsize > 0) {
-				if (parse_load_command(mach, ptr) != EXIT_SUCCESS) {
-					free_sections_list(mach->sections_list);
-					btree_free(mach->symbols_root);
-					return (-EXIT_FAILURE);
-				}
-				ptr = (void *)((uintptr_t)ptr + ptr->cmdsize);
-			} else { return (-EXIT_FAILURE); }
-		}
+	if (mach->object.length < sizeof(struct mach_header_64))
+		return (-EXIT_FAILURE);
+	memcpy(&header, mach->object.head, sizeof(struct mach_header_64));
+	if (mach->magic == MH_CIGAM_64)
+		swap_mach_header_64(&header, NXHostByteOrder());
+	ptr = (struct load_command *)((uintptr_t)mach->object.head + sizeof(struct mach_header_64));
+	for (unsigned int index = 0; index < header.ncmds; ++index) {
+		if (__is_readable(&(mach->object), ptr, sizeof(struct load_command)) && ptr->cmdsize > 0) {
+			if (parse_load_command(mach, ptr) != EXIT_SUCCESS) {
+				free_sections_list(mach->sections_list);
+				btree_free(mach->symbols_root);
+				return (-EXIT_FAILURE);
+			}
+			ptr = (void *)((uintptr_t)ptr + ptr->cmdsize);
+		} else { return (-EXIT_FAILURE); }
 	}
 	return (EXIT_SUCCESS);
 }

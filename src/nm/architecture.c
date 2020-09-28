@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/26 12:11:21 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 09:28:16 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int			get_supported_macho_section(struct machobj *mach)
 	if (header.magic == FAT_CIGAM)
 		swap_fat_header(&header, NXHostByteOrder());
 	for (register uint32_t index = 0; index < header.nfat_arch; ++index) {
-		if (__readable(&(mach->object), &(ptr[index]), struct fat_arch) == TRUE) {
+		if (__is_readable(&(mach->object), &(ptr[index]), sizeof(struct fat_arch))) {
 			memcpy(&archi, &(ptr[index]), sizeof(struct fat_arch));
 			if (mach->magic == FAT_CIGAM)
 				swap_fat_arch(&archi, 1, NXHostByteOrder());
@@ -63,11 +63,11 @@ int				list_symbols_from_file(struct file *f, struct arguments *args)
 
 	memset(&mach, 0, sizeof(struct machobj));
 	memcpy(&(mach.object), f, sizeof(struct file));
-	mach.magic = safe_read_u32(f, (uintptr_t)f->head);
+	mach.magic = safe_read_u32(f, f->head);
 	if (__is_universal(mach.magic) == TRUE)
 		if (get_supported_macho_section(&mach) != EXIT_SUCCESS)
-			return (-EXIT_FAILURE);
-	if (!(mach.magic = safe_read_u32(&(mach.object), (uintptr_t)mach.object.head)))
+			return (-fprintf(stderr, "%s: malformed fat file\n", args->arguments[args->idx]));
+	if (!(mach.magic = safe_read_u32(&(mach.object), mach.object.head)))
 		return (-fprintf(stderr, "%s: malformed object file\n", args->arguments[args->idx]));
 	if (__is_supported(mach.magic) == FALSE)
 		return (-fprintf(stderr, "%s: unsupported target\n", args->arguments[args->idx]));

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:33:18 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/26 12:16:58 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 09:25:03 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int			get_supported_macho_section(struct machsect *mach)
 	if (header.magic == FAT_CIGAM)
 		swap_fat_header(&header, NXHostByteOrder());
 	for (uint32_t index = 0; index < header.nfat_arch; ++index) {
-		if (__readable(&(mach->object), &(ptr[index]), struct fat_arch) == TRUE) {
+		if (__is_readable(&(mach->object), &(ptr[index]), sizeof(struct fat_arch))) {
 			memcpy(&archi, &(ptr[index]), sizeof(struct fat_arch));
 			if (mach->magic == FAT_CIGAM)
 				swap_fat_arch(&archi, 1, NXHostByteOrder());

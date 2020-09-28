@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/08 19:27:26 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 17:10:31 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 09:20:05 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 
 # include "file.h"
 # include <stdint.h>
+# include <unistd.h>
 
-# define __end_addr(f)		((uintptr_t)f->head + f->length)
-# define __readable(f, p, type)	((uintptr_t)p >= (uintptr_t)f->head && (uintptr_t)p <= __end_addr(f) - sizeof(type))
+# define __end_addr(f)		((uintptr_t)(f)->head + (f)->length)
 
-uint32_t		safe_read_u32(struct file *, uintptr_t);
-uint64_t		safe_read_u64(struct file *, uintptr_t);
 uint32_t		swap_uint32(uint32_t);
+uint32_t		safe_read_u32(struct file *, void *);
+uint64_t		safe_read_u64(struct file *, void *);
+int			__is_readable(struct file *, void *, size_t);
 
 #endif /* __BYTES_H__ */

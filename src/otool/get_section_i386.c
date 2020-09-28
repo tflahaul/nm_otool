@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:37:20 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/26 12:06:23 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 09:24:31 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int			parse_segment(struct machsect *mach, void const *off)
 	if (strcmp(segment.segname, SEG_TEXT) == 0) {
 		secptr = (struct section *)((uintptr_t)off + sizeof(struct segment_command));
 		for (uint32_t index = 0; index < segment.nsects; ++index) {
-			if (__readable(&(mach->object), &(secptr[index]), struct section) == TRUE) {
+			if (__is_readable(&(mach->object), &(secptr[index]), sizeof(struct section))) {
 				memcpy(&section, &(secptr[index]), sizeof(struct section));
 				if (mach->magic == MH_CIGAM)
 					swap_section(&section, 1, NXHostByteOrder());
@@ -78,20 +78,20 @@ int				get_section_i386(struct machsect *mach)
 	struct mach_header	header;
 	struct load_command	*ptr;
 
-	if (__readable(&(mach->object), mach->object.head, struct mach_header)) {
-		memcpy(&header, mach->object.head, sizeof(struct mach_header));
-		if (mach->magic == MH_CIGAM)
-			swap_mach_header(&header, NXHostByteOrder());
-		ptr = (struct load_command *)((uintptr_t)mach->object.head + sizeof(struct mach_header));
-		for (unsigned int index = 0; index < header.ncmds; ++index) {
-			if (__readable(&(mach->object), ptr, struct load_command) && ptr->cmdsize > 0) {
-				if (parse_load_command(mach, ptr) != EXIT_SUCCESS)
-					return (-EXIT_FAILURE);
-				else if (mach->section.head != NULL)
-					return (EXIT_SUCCESS);
-				ptr = (void *)((uintptr_t)ptr + ptr->cmdsize);
-			} else { return (-EXIT_FAILURE); }
-		}
+	if (mach->object.length < sizeof(struct mach_header))
+		return (-EXIT_FAILURE);
+	memcpy(&header, mach->object.head, sizeof(struct mach_header));
+	if (mach->magic == MH_CIGAM)
+		swap_mach_header(&header, NXHostByteOrder());
+	ptr = (struct load_command *)((uintptr_t)mach->object.head + sizeof(struct mach_header));
+	for (unsigned int index = 0; index < header.ncmds; ++index) {
+		if (__is_readable(&(mach->object), ptr, sizeof(struct load_command)) && ptr->cmdsize > 0) {
+			if (parse_load_command(mach, ptr) != EXIT_SUCCESS)
+				return (-EXIT_FAILURE);
+			else if (mach->section.head != NULL)
+				return (EXIT_SUCCESS);
+			ptr = (void *)((uintptr_t)ptr + ptr->cmdsize);
+		} else { return (-EXIT_FAILURE); }
 	}
 	return (EXIT_SUCCESS);
 }
