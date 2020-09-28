@@ -6,22 +6,12 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 09:49:38 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 09:56:29 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __NM_H__
 # define __NM_H__
-
-# if defined __APPLE__
-#  include <mach-o/loader.h>
-#  include <mach-o/nlist.h>
-#  define __is_universal(x)	(x == FAT_MAGIC || x == FAT_CIGAM)
-#  define __is_supported(x)	(x == MH_MAGIC_64 || x == MH_CIGAM_64 || x == MH_MAGIC || x == MH_CIGAM)
-#  define __is_64_bytes(x)	(x == MH_MAGIC_64 || x == MH_CIGAM_64)
-# else
-#  error "Systems other than macOS are not supported"
-# endif /* __APPLE__ */
 
 # include "arguments.h"
 # include "file.h"

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:37:18 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 09:23:15 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 10:30:23 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,45 +26,44 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int			parse_segment(struct machsect *mach, void const *off)
+static int			parse_segment(struct machsect *mach, uint32_t nsects, void const *off)
 {
-	struct segment_command_64	segment;
-	struct section_64		section;
-	struct section_64		*secptr;
+	struct section_64	section;
+	struct section_64	*secptr;
 
-	memcpy(&segment, off, sizeof(struct segment_command_64));
-	if (mach->magic == MH_CIGAM_64)
-		swap_segment_command_64(&segment, NXHostByteOrder());
-	if (strcmp(segment.segname, SEG_TEXT) == 0) {
-		secptr = (struct section_64 *)((uintptr_t)off + sizeof(struct segment_command_64));
-		for (uint32_t index = 0; index < segment.nsects; ++index) {
-			if (__is_readable(&(mach->object), &(secptr[index]), sizeof(struct section_64))) {
-				memcpy(&section, &(secptr[index]), sizeof(struct section_64));
-				if (mach->magic == MH_CIGAM_64)
-					swap_section_64(&section, 1, NXHostByteOrder());
-				if (strcmp(section.sectname, SECT_TEXT) == 0) {
-					if ((uintptr_t)mach->object.head + section.offset + section.size < __end_addr(&(mach->object))) {
-						mach->section.head = (void *)((uintptr_t)mach->object.head + section.offset);
-						mach->section.length = (uintptr_t)section.size;
-						return (EXIT_SUCCESS);
-					}
+	secptr = (struct section_64 *)((uintptr_t)off + sizeof(struct segment_command_64));
+	for (register uint32_t index = 0; index < nsects; ++index) {
+		if (__is_readable(&(mach->object), &(secptr[index]), sizeof(struct section_64))) {
+			memcpy(&section, &(secptr[index]), sizeof(struct section_64));
+			if (mach->magic == MH_CIGAM_64)
+				swap_section_64(&section, 1, NXHostByteOrder());
+			if (strcmp(section.segname, SEG_TEXT) == 0 && strcmp(section.sectname, SECT_TEXT) == 0) {
+				if ((uintptr_t)mach->object.head + section.offset + section.size < __end_addr(&(mach->object))) {
+					mach->section.head = (void *)((uintptr_t)mach->object.head + section.offset);
+					mach->section.length = (uintptr_t)section.size;
+					mach->offset = section.offset;
+					return (EXIT_SUCCESS);
 				}
-			} else { return (-EXIT_FAILURE); }
-		}
+			}
+		} else { return (-EXIT_FAILURE); }
 	}
 	return (EXIT_SUCCESS);
 }
 
 static int			parse_load_command(struct machsect *mach, void const *off)
 {
-	struct load_command	loadcmd;
+	struct load_command		loadcmd;
+	struct segment_command_64	segment;
 
 	memcpy(&loadcmd, off, sizeof(struct load_command));
 	if (mach->magic == MH_CIGAM_64)
 		swap_load_command(&loadcmd, NXHostByteOrder());
 	if ((uintptr_t)off + loadcmd.cmdsize <= __end_addr(&(mach->object))) {
 		if (loadcmd.cmd == LC_SEGMENT_64) {
-			if (parse_segment(mach, off) != EXIT_SUCCESS)
+			memcpy(&segment, off, sizeof(struct segment_command_64));
+			if (mach->magic == MH_CIGAM_64)
+				swap_segment_command_64(&segment, NXHostByteOrder());
+			if (parse_segment(mach, segment.nsects, off) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
 			else if (mach->section.head != NULL)
 				return (EXIT_SUCCESS);

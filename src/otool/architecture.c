@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:33:18 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 09:25:03 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/28 10:21:55 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ int				print_section(struct file *f, struct arguments *args)
 
 	memset(&mach, 0, sizeof(struct machsect));
 	memcpy(&(mach.object), f, sizeof(struct file));
-	mach.magic = safe_read_u32(f, (uintptr_t)f->head);
+	mach.magic = safe_read_u32(f, f->head);
 	if (__is_universal(mach.magic) == TRUE)
 		if (get_supported_macho_section(&mach) != EXIT_SUCCESS)
 			return (-EXIT_FAILURE);
-	if (!(mach.magic = safe_read_u32(&(mach.object), (uintptr_t)mach.object.head)))
+	if (!(mach.magic = safe_read_u32(&(mach.object), mach.object.head)))
 		return (-fprintf(stderr, "%s: malformed object file\n", args->arguments[args->idx]));
 	if (__is_supported(mach.magic) == FALSE)
 		return (-fprintf(stderr, "%s: unsupported target\n", args->arguments[args->idx]));
