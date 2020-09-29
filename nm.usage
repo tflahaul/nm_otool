@@ -1,5 +1,5 @@
-Usage: ./ft_nm [option(s)] [file(s)]
-List symbols in [file(s)] (a.out by default).
+Usage: ./ft_nm [option(s)] file(s)
+List symbols in file(s).
 Available options are:
     -u, --undefined-only  Display only undefined symbols
     -d, --defined-only    Display only defined symbols

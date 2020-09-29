@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 11:25:24 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 09:17:20 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/29 12:12:08 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ static int		get_type_character(struct symbol *sym, struct machobj *m)
 
 static void		print_node(struct machobj *mach, struct symbol *sym, size_t opt)
 {
+	if ((opt & OPTION_U) && (sym->type & N_TYPE) != N_UNDF)
+		return ;
+	if ((opt & OPTION_D) && (sym->type & N_TYPE) == N_UNDF)
+		return ;
 	if (!(opt & OPTION_J)) {
 		if (sym->value != 0 || (sym->value == 0 && (sym->type & N_TYPE) != N_UNDF)) {
 			printf(__is_64_bytes(mach->magic) ? "%016llx " : "%08llx ", sym->value);

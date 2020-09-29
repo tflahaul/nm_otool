@@ -6,18 +6,12 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:34:14 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 21:54:53 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/29 12:05:24 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __OTOOL_H__
 # define __OTOOL_H__
-
-# if defined __APPLE__
-#  include <mach-o/loader.h>
-# else
-#  error "Systems other than macOS are not supported"
-# endif /* __APPLE */
 
 # include "file.h"
 # include "arguments.h"
