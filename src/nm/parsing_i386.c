@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/16 18:06:19 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 09:51:03 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/29 16:28:56 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <mach-o/swap.h>
 #else
 # error "Systems other than macOS are not supported"
-#endif /* __APPLE */
+#endif /* __APPLE__ */
 #include <string.h>
 #include <stdint.h>
 

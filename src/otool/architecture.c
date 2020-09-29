@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:33:18 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 21:54:06 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/29 16:27:52 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <mach-o/fat.h>
 #else
 # error "Systems other than macOS are not supported"
-#endif /* __APPLE */
+#endif /* __APPLE__ */
 #include <stdint.h>
 #include <unistd.h>
 #include <string.h>

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/21 11:25:24 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/29 12:12:08 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/29 16:29:05 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <mach-o/nlist.h>
 #else
 # error "Systems other than macOS are not supported"
-#endif /* __APPLE */
+#endif /* __APPLE__ */
 #include <unistd.h>
 #include <stdint.h>
 #include <string.h>
