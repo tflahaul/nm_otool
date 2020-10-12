@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:37:18 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/29 16:28:17 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/09/30 19:15:51 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int			parse_segment(struct machsect *mach, uint32_t nsects, void const *o
 					mach->section.head = (void *)((uintptr_t)mach->object.head + section.offset);
 					mach->section.length = (uintptr_t)section.size;
 					mach->offset = section.offset;
-					return (EXIT_SUCCESS);
+					break;
 				}
 			}
 		} else { return (-EXIT_FAILURE); }
@@ -88,7 +88,7 @@ int				get_section_x86_64(struct machsect *mach)
 			if (parse_load_command(mach, ptr) != EXIT_SUCCESS)
 				return (-EXIT_FAILURE);
 			else if (mach->section.head != NULL)
-				return (EXIT_SUCCESS);
+				break;
 			ptr = (void *)((uintptr_t)ptr + ptr->cmdsize);
 		} else { return (-EXIT_FAILURE); }
 	}
