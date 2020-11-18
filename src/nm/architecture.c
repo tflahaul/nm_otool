@@ -59,7 +59,7 @@ static int			get_supported_macho_section(struct machobj *mach)
 			if (mach->magic == FAT_CIGAM)
 				swap_fat_arch(&archi, 1, NXHostByteOrder());
 			if (archi.cputype == TARGET_CPU_TYPE) {
-				if ((uintptr_t)mach->object.head + archi.offset + archi.size < __end_addr(&(mach->object))) {
+				if ((uintptr_t)mach->object.head + archi.offset + archi.size <= __end_addr(&(mach->object))) {
 					mach->object.head = (void *)((uintptr_t)mach->object.head + archi.offset);
 					mach->object.length = (size_t)archi.size;
 					return (EXIT_SUCCESS);
