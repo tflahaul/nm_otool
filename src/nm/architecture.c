@@ -39,7 +39,7 @@
 
 static inline int		get_symbols(struct machobj *mach)
 {
-	return (__is_64_bytes(mach->magic) ? get_symbols_x86_64(mach) : get_symbols_i386(mach));
+	return (__is_64_bytes(mach->magic) ? get_symbols_64(mach) : get_symbols_32(mach));
 }
 
 static int			get_supported_macho_section(struct machobj *mach)

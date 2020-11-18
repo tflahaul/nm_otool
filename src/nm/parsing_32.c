@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_i386.c                                     :+:      :+:    :+:   */
+/*   parsing_32.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -90,7 +90,7 @@ static int			parse_load_command(struct machobj *mach, void const *off)
 	return (EXIT_SUCCESS);
 }
 
-int				get_symbols_i386(struct machobj *mach)
+int				get_symbols_32(struct machobj *mach)
 {
 	struct mach_header	header;
 	struct load_command	*ptr;

@@ -33,10 +33,10 @@ struct			machsect
 # pragma pack(pop)
 
 int			load_file_informations(struct file *, char const *);
-int			print_strings(struct file *);
 int			print_section(struct file *, struct arguments *);
-int			get_section_x86_64(struct machsect *);
-int			get_section_i386(struct machsect *);
+int			get_section_64(struct machsect *);
+int			get_section_32(struct machsect *);
+int			print_strings(struct file *);
 void			print_strings_section(struct machsect *, struct arguments *);
 void			print_text_section(struct machsect *, struct arguments *);
 

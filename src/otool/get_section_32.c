@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_section_i386.c                                 :+:      :+:    :+:   */
+/*   get_section_32.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -72,7 +72,7 @@ static int			parse_load_command(struct machsect *mach, void const *off)
 	return (EXIT_SUCCESS);
 }
 
-int				get_section_i386(struct machsect *mach)
+int				get_section_32(struct machsect *mach)
 {
 	struct mach_header	header;
 	struct load_command	*ptr;

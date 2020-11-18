@@ -45,9 +45,9 @@ struct			machobj
 
 int		load_file_informations(struct file *, char const *);
 int		list_symbols_from_file(struct file *, struct arguments *);
-int		get_symbols_i386(struct machobj *);
-int		get_symbols_x86_64(struct machobj *);
 int		insert_symbol(struct machobj *, void *);
+int		get_symbols_32(struct machobj *);
+int		get_symbols_64(struct machobj *);
 void		print_symbols(struct machobj *, struct arguments *);
 void		btree_free(struct symbol *);
 

@@ -39,7 +39,7 @@
 
 static inline int		get_target_section(struct machsect *mach)
 {
-	return (__is_64_bytes(mach->magic) ? get_section_x86_64(mach) : get_section_i386(mach));
+	return (__is_64_bytes(mach->magic) ? get_section_64(mach) : get_section_32(mach));
 }
 
 static int			get_supported_macho_section(struct machsect *mach)
