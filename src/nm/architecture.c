@@ -19,6 +19,17 @@
 # include <mach-o/loader.h>
 # include <mach-o/swap.h>
 # include <mach-o/fat.h>
+# if defined __i386__
+#  define TARGET_CPU_TYPE	CPU_TYPE_I386
+# elif defined __x86_64__
+#  define TARGET_CPU_TYPE	CPU_TYPE_X86_64
+# elif defined __arm__
+#  define TARGET_CPU_TYPE	CPU_TYPE_ARM
+# elif defined __arm64__
+#  define TARGET_CPU_TYPE	CPU_TYPE_ARM64
+# else
+#  error "Your CPU architecture is not supported"
+# endif
 #else
 # error "Systems other than macOS are not supported"
 #endif /* __APPLE__ */
@@ -47,7 +58,7 @@ static int			get_supported_macho_section(struct machobj *mach)
 			memcpy(&archi, &(ptr[index]), sizeof(struct fat_arch));
 			if (mach->magic == FAT_CIGAM)
 				swap_fat_arch(&archi, 1, NXHostByteOrder());
-			if (archi.cputype == CPU_TYPE_X86_64 || archi.cputype == CPU_TYPE_I386) {
+			if (archi.cputype == TARGET_CPU_TYPE) {
 				if ((uintptr_t)mach->object.head + archi.offset + archi.size < __end_addr(&(mach->object))) {
 					mach->object.head = (void *)((uintptr_t)mach->object.head + archi.offset);
 					mach->object.length = (size_t)archi.size;
