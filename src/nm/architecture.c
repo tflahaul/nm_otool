@@ -28,7 +28,7 @@
 # elif defined __arm64__
 #  define TARGET_CPU_TYPE	CPU_TYPE_ARM64
 # else
-#  error "Your CPU architecture is not supported"
+#  error "CPU architecture is not supported"
 # endif
 #else
 # error "Systems other than macOS are not supported"
