@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/06 13:43:31 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 20:26:35 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/11/26 15:12:18 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <sys/mman.h>
 #include <string.h>
 
-int				main(int argc, char const **argv)
+int				main(int const argc, char const **argv)
 {
 	struct file		file;
 	struct arguments	args;

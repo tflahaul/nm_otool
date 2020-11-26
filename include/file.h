@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/25 15:36:30 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 15:37:10 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/11/26 15:28:55 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 
 # include <stdint.h>
 
-struct			file
-{
+struct			file {
 	void		*head;
 	uintptr_t	length;
 };

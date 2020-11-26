@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:27 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/10 14:56:13 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/11/26 15:28:43 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
 # define EXIT_FALSE		0
 # define EXIT_TRUE		1
 
-static inline void		ft_assert(int x, char const *err, char const *f, int l)
-{
+static inline void		ft_assert(int x, char const *err, char const *f, int l) {
 	if (__builtin_expect(((x) != EXIT_SUCCESS), 0)) {
 		fprintf(stderr, "Error: %s:%i -> %s\n", f, l, err);
 		exit(EXIT_FAILURE);

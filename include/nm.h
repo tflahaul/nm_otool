@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 09:33:17 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/28 12:27:13 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/11/26 15:29:02 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@
 
 # pragma pack(push, 4)
 
-struct			symbol
-{
+struct			symbol {
 	uint32_t	type;
 	uint32_t	sectid;
 	uint64_t	value;
@@ -32,8 +31,7 @@ struct			symbol
 	struct symbol	*left;
 };
 
-struct			machobj
-{
+struct			machobj {
 	struct msection	*sections_list;
 	struct symbol	*symbols_root;
 	void		*strtab;

@@ -1,83 +1,43 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    makefile                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/12/03 22:08:10 by abrunet           #+#    #+#              #
-#    Updated: 2020/09/24 11:01:19 by thflahau         ###   ########.fr        #
+#    Created: 2020/11/26 16:19:12 by thflahau          #+#    #+#              #
+#    Updated: 2020/11/26 16:31:18 by thflahau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	ft_nm
+NM		=	../ft_nm
+NM_SRCDIR	=	nm
+NM_OBJS		=	objn
 
-#######   DIRECTORIES   #######
-HEADERS		=	include
-SRCDIR		=	src/nm
-OBJDIR		=	obj
+OTOOL		=	../ft_otool
+OTOOL_SRCDIR	=	otool
+OTOOL_OBJS	=	objo
 
-DIRS		=	$(patsubst $(SRCDIR)%, $(OBJDIR)%, $(shell find $(SRCDIR) -type d))
+all	: nm otool
 
-##########   FLAGS   ##########
-CCFLAGS		=	-Wall					\
-			-Wextra					\
-			-Werror					\
-			-Wpadded				\
-			-Wno-unused-result			\
-			-Wsign-compare				\
-			-Wunreachable-code			\
-			-pedantic
+stripped:
+	@make stripped -C src NAME=$(NM) SRCDIR=$(NM_SRCDIR) OBJDIR=$(NM_OBJS)
+	@make stripped -C src NAME=$(OTOOL) SRCDIR=$(OTOOL_SRCDIR) OBJDIR=$(OTOOL_OBJS)
 
-INCFLAG		=	-I $(HEADERS)
+nm	:
+	@make -C src NAME=$(NM) SRCDIR=$(NM_SRCDIR) OBJDIR=$(NM_OBJS)
 
-#########   SOURCES   #########
-SRCS		=	$(shell find $(SRCDIR) -type f -o -type l -name "*.c")
-
-OBJS		=	$(patsubst $(SRCDIR)%.c, $(OBJDIR)%.o, $(SRCS))
-
-DEPENDS		=	${OBJS:.o=.d}
-
-#########   COLORS   ##########
-STD		=	\033[0m
-GREEN		=	\033[0;32m
-YELLOW		=	\033[0;33m
-
-##########   RULES   ##########
-all	: $(NAME)
-
-$(NAME)	: $(OBJS)
-	@printf "$(YELLOW)%-45s$(STD)" "Building executable $@ ..."
-	@$(CC) $(CCFLAGS) $(INCFLAG) $(OBJS) -o $@
-	@echo "$(GREEN)DONE$(STD)"
-
--include $(DEPENDS)
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(DIRS)
-	@printf "%-45s" " > Compiling $* ..."
-	@$(CC) $(CCFLAGS) -MMD $(INCFLAG) -c $< -o $@
-	@echo '✓'
-
-stripped: $(NAME)
-	@printf "$(YELLOW)%-45s$(STD)" "Stripping executable $(NAME) ..."
-	@strip $(NAME)
-	@echo "$(GREEN)DONE$(STD)"
+otool	:
+	@make -C src NAME=$(OTOOL) SRCDIR=$(OTOOL_SRCDIR) OBJDIR=$(OTOOL_OBJS)
 
 clean	:
-	@if [ -d $(OBJDIR) ]; then \
-		printf "$(YELLOW)%-45s$(STD)" "Removing objects ...";\
-		/bin/rm -rf $(OBJDIR);\
-		echo "$(GREEN)DONE$(STD)";\
-	fi;
+	@make clean -C src NAME=$(NM) SRCDIR=$(NM_SRCDIR) OBJDIR=$(NM_OBJS)
+	@make clean -C src NAME=$(OTOOL) SRCDIR=$(OTOOL_SRCDIR) OBJDIR=$(OTOOL_OBJS)
 
 fclean	: clean
-	@if [ -f $(NAME) ]; then \
-		printf "$(YELLOW)%-45s$(STD)" "Removing $(NAME) ...";\
-		/bin/rm -f $(NAME);\
-		echo "$(GREEN)DONE$(STD)";\
-	fi;
+	@make fclean -C src NAME=$(NM) SRCDIR=$(NM_SRCDIR) OBJDIR=$(NM_OBJS)
+	@make fclean -C src NAME=$(OTOOL) SRCDIR=$(OTOOL_SRCDIR) OBJDIR=$(OTOOL_OBJS)
 
 re	: fclean all
 
-.PHONY	: all stripped clean fclean re
+.PHONY	: all nm otool clean fclean re

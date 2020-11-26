@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/23 14:10:41 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/25 09:45:12 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/11/26 15:29:19 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@
 
 #pragma pack(push, 4)
 
-struct			msection
-{
+struct			msection {
 	uint32_t	id;
 	char		sectname[16];
 	struct msection	*next;

@@ -6,7 +6,7 @@
 /*   By: thflahau <thflahau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/23 17:34:14 by thflahau          #+#    #+#             */
-/*   Updated: 2020/09/29 12:05:24 by thflahau         ###   ########.fr       */
+/*   Updated: 2020/11/26 15:29:15 by thflahau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,15 @@
 # define __is_print(x)	(x > 32 && x < 127)
 
 # pragma pack(push, 4)
-struct			machsect
-{
+
+struct			machsect {
 	char		*target;
 	struct file	object;
 	struct file	section;
 	uint32_t	magic;
 	uint32_t	offset;
 };
+
 # pragma pack(pop)
 
 int			load_file_informations(struct file *, char const *);
