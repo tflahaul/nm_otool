@@ -24,6 +24,9 @@ CCFLAGS		=	-Wall					\
 			-Wextra					\
 			-Werror					\
 			-Wpadded				\
+			-Wno-unused-result			\
+			-Wsign-compare				\
+			-Wunreachable-code			\
 			-pedantic
 
 INCFLAG		=	-I $(HEADERS)
